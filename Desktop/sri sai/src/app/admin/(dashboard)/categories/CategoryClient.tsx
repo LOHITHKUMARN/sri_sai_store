@@ -1,0 +1,190 @@
+"use client"
+
+import { useState } from "react"
+import { Button } from "@/components/ui/button"
+import { Input } from "@/components/ui/input"
+import { Label } from "@/components/ui/label"
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger, DialogFooter } from "@/components/ui/dialog"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Trash2, Plus } from "lucide-react"
+import { createCategory, deleteCategory } from "./actions"
+
+type Store = { id: string, name: string }
+type Category = {
+  id: string
+  name: string
+  storeId: string
+  store: Store
+  _count: { products: number }
+}
+
+export default function CategoryClient({ 
+  categories, 
+  stores 
+}: { 
+  categories: Category[], 
+  stores: Store[] 
+}) {
+  const [isDialogOpen, setIsDialogOpen] = useState(false)
+  const [name, setName] = useState("")
+  const [storeId, setStoreId] = useState("")
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [error, setError] = useState("")
+
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (!name || !storeId) return
+
+    setIsSubmitting(true)
+    setError("")
+    
+    try {
+      await createCategory({ name, storeId })
+      setIsDialogOpen(false)
+      setName("")
+      setStoreId("")
+    } catch (err) {
+      setError("Failed to create category")
+    } finally {
+      setIsSubmitting(false)
+    }
+  }
+
+  const handleDelete = async (id: string) => {
+    if (confirm("Are you sure you want to delete this category?")) {
+      try {
+        await deleteCategory(id)
+      } catch (err: any) {
+        alert(err.message || "Failed to delete category")
+      }
+    }
+  }
+
+  return (
+    <div className="space-y-6">
+      <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
+        <h1 className="text-3xl font-bold tracking-tight">Categories</h1>
+        
+        <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
+          <DialogTrigger render={<Button />}>
+            <Plus className="w-4 h-4 mr-2" /> Add Category
+          </DialogTrigger>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Create New Category</DialogTitle>
+            </DialogHeader>
+            <form onSubmit={handleCreate} className="space-y-4 pt-4">
+              {error && <div className="text-sm text-red-500">{error}</div>}
+              
+              <div className="space-y-2">
+                <Label htmlFor="name">Category Name</Label>
+                <Input 
+                  id="name" 
+                  value={name} 
+                  onChange={(e) => setName(e.target.value)} 
+                  placeholder="e.g., Refrigerators"
+                  required 
+                />
+              </div>
+
+              <div className="space-y-2">
+                  <Label htmlFor="store">Store</Label>
+                  <Select value={storeId} onValueChange={(val: string | null) => val && setStoreId(val)} required>
+                    <SelectTrigger>
+                    <SelectValue placeholder="Select a store" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {stores.map(store => (
+                      <SelectItem key={store.id} value={store.id}>
+                        {store.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <DialogFooter>
+                <Button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Creating..." : "Create Category"}
+                </Button>
+              </DialogFooter>
+            </form>
+          </DialogContent>
+        </Dialog>
+      </div>
+
+      <div className="border rounded-md bg-white hidden md:block">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Store</TableHead>
+              <TableHead>Products</TableHead>
+              <TableHead className="text-right">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {categories.length === 0 ? (
+              <TableRow>
+                <TableCell colSpan={4} className="text-center py-6 text-muted-foreground">
+                  No categories found. Create one to get started.
+                </TableCell>
+              </TableRow>
+            ) : (
+              categories.map((category) => (
+                <TableRow key={category.id}>
+                  <TableCell className="font-medium">{category.name}</TableCell>
+                  <TableCell>{category.store?.name || 'No Store'}</TableCell>
+                  <TableCell>{category._count.products}</TableCell>
+                  <TableCell className="text-right">
+                    <Button 
+                      variant="ghost" 
+                      size="sm" 
+                      onClick={() => handleDelete(category.id)}
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                    >
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))
+            )}
+          </TableBody>
+        </Table>
+      </div>
+
+      {/* Mobile view - Cards */}
+      <div className="md:hidden flex flex-col gap-4">
+        {categories.length === 0 ? (
+          <div className="text-center py-6 text-muted-foreground bg-white border rounded-lg">
+            No categories found. Create one to get started.
+          </div>
+        ) : (
+          categories.map((category) => (
+            <div key={category.id} className="flex flex-col p-4 bg-white border rounded-xl shadow-sm">
+              <div className="flex justify-between items-start mb-2">
+                <div>
+                  <h3 className="font-bold text-gray-900 text-lg">{category.name}</h3>
+                  <span className="inline-flex items-center rounded-full border border-gray-200 bg-gray-50 px-2 py-0.5 text-[10px] font-medium text-gray-600 mt-1">
+                    {category.store?.name || 'No Store'}
+                  </span>
+                </div>
+                <div className="text-right">
+                  <span className="text-2xl font-bold text-gray-900">{category._count.products}</span>
+                  <div className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">Products</div>
+                </div>
+              </div>
+              
+              <div className="mt-3 flex gap-2 border-t border-gray-100 pt-3">
+                <Button variant="outline" className="flex-1 text-red-600 border-red-200 hover:bg-red-50" onClick={() => handleDelete(category.id)}>
+                  <Trash2 className="w-4 h-4 mr-2" /> Delete
+                </Button>
+              </div>
+            </div>
+          ))
+        )}
+      </div>
+    </div>
+  )
+}

@@ -1,0 +1,560 @@
+"use client"
+
+import { useState, useEffect } from "react"
+import Link from "next/link"
+import { ArrowLeft, CheckCircle2, XCircle, Share2, MessageSquare, ChevronLeft, ChevronRight } from "lucide-react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
+import { EnquiryForm } from "@/components/EnquiryForm"
+import { ProductInformation } from "@/components/ProductInformation"
+import { TrustBadges } from "@/components/TrustBadges"
+import { FurnitureTrustBadges } from "@/components/FurnitureTrustBadges"
+import { WhatsAppCustomButton } from "@/components/WhatsAppCustomButton"
+
+const formatSquashedText = (text: string | null) => {
+  if (!text) return "";
+  
+  if (text.includes('✅')) {
+    // 1. Clean up HTML entities and tags
+    let cleanText = text.replace(/&nbsp;/g, ' ').replace(/^<p>/i, '').replace(/<\/p>$/i, '');
+    
+    // 2. Split by ✅
+    let parts = cleanText.split('✅');
+    
+    // 3. Format the introduction header
+    let intro = parts[0].trim();
+    if (intro.toUpperCase().includes('ABOUT THIS ITEM')) {
+      intro = intro.replace(/ABOUT THIS ITEM/i, '<h3 class="text-xl font-bold mb-4 mt-2 text-gray-900">About this item</h3>');
+    } else if (intro) {
+      intro = `<p class="mb-4">${intro}</p>`;
+    }
+
+    let extraBlocks = "";
+    
+    // 4. Format each bullet point
+    let items = parts.slice(1).map(part => {
+      // Check if this bullet accidentally contains trailing sections
+      const productDetailsMatch = part.match(/PRODUCT DETAILS \/ SPECIFICATIONS/i);
+      const whatsInBoxMatch = part.match(/WHAT'S IN THE BOX/i);
+      
+      let firstMatchIndex = -1;
+      if (productDetailsMatch) firstMatchIndex = productDetailsMatch.index!;
+      if (whatsInBoxMatch && (firstMatchIndex === -1 || whatsInBoxMatch.index! < firstMatchIndex)) {
+        firstMatchIndex = whatsInBoxMatch.index!;
+      }
+      
+      if (firstMatchIndex !== -1) {
+        let bulletContent = part.substring(0, firstMatchIndex).trim();
+        extraBlocks += part.substring(firstMatchIndex);
+        return `<li class="ml-5 list-disc mb-3 text-gray-700 leading-relaxed">✅ ${bulletContent}</li>`;
+      }
+      
+      return `<li class="ml-5 list-disc mb-3 text-gray-700 leading-relaxed">✅ ${part.trim()}</li>`;
+    });
+
+    let html = `${intro}\n<ul class="mb-8 mt-4">\n${items.join('\n')}\n</ul>\n`;
+
+    // 5. Format any trailing sections that were pulled out
+    if (extraBlocks) {
+      // Convert all <p> and </p> tags to <br/> to flatten the structure
+      // This prevents Tailwind's space-y-2 from adding massive gaps between paragraphs
+      extraBlocks = extraBlocks.replace(/<\/?p[^>]*>/gi, '<br/>');
+
+      // Strip surrounding tags and newlines around headings
+      extraBlocks = extraBlocks.replace(/(?:<br\s*\/?>|\s)*(?:<strong[^>]*>|<b>)?\s*(PRODUCT DETAILS \/ SPECIFICATIONS)\s*(?:<\/strong>|<\/b>)?(?:<br\s*\/?>|\s)*/gi, '###PRODUCT_DETAILS###');
+      extraBlocks = extraBlocks.replace(/(?:<br\s*\/?>|\s)*(?:<strong[^>]*>|<b>)?\s*(WHAT(?:'|&#39;)S IN THE BOX)\s*(?:<\/strong>|<\/b>)?(?:<br\s*\/?>|\s)*/gi, '###WHATS_IN_THE_BOX###');
+
+      // Auto-format specs that look like "Key Name: Value" 
+      extraBlocks = extraBlocks.replace(/([A-Z][A-Za-z0-9\-\(\) &]+):/g, '<br/><span class="font-semibold text-gray-900">$1:</span>');
+      // Auto-format what's in the box items that look like "- 1 x" or "- Item"
+      extraBlocks = extraBlocks.replace(/ - /g, '<br/>• ');
+
+      // Inject the headers
+      extraBlocks = extraBlocks.replace(/###PRODUCT_DETAILS###/g, '<h3 class="text-xl font-bold mt-8 mb-2 text-gray-900 border-t pt-6">Product Details / Specifications</h3>');
+      extraBlocks = extraBlocks.replace(/###WHATS_IN_THE_BOX###/g, '<h3 class="text-xl font-bold mt-8 mb-2 text-gray-900 border-t pt-6">What\'s in the box</h3>');
+
+      // Remove any leading breaks after h3
+      extraBlocks = extraBlocks.replace(/(<\/h3>)(?:<br\s*\/?>|\s|&nbsp;)+/gi, '$1');
+      // Remove any trailing breaks before h3
+      extraBlocks = extraBlocks.replace(/(?:<br\s*\/?>|\s|&nbsp;)+(<h3)/gi, '$1');
+      // Clean up consecutive breaks
+      extraBlocks = extraBlocks.replace(/(?:<br\s*\/?>\s*){2,}/gi, '<br/>');
+
+      html += `<div class="text-gray-700 space-y-2 leading-relaxed">${extraBlocks}</div>`;
+    }
+
+    return `<div class="whitespace-normal">${html}</div>`;
+  }
+  
+  return text;
+};
+
+type Product = {
+  id: string
+  name: string
+  brand: string
+
+  description: string | null
+  legacyDescription: string | null
+  features: string[]
+  whatsInTheBox: string[]
+
+  inStock: boolean
+  imageUrls: string[]
+  specs: any
+  store: { name: string }
+  material?: string | null
+  color?: string | null
+  dimensions?: string | null
+}
+
+type RelatedProduct = {
+  id: string
+  name: string
+  brand: string
+  imageUrls: string[]
+  inStock: boolean
+}
+
+const materialCareNotes: Record<string, string> = {
+  "Velvet": "Spot clean with a damp cloth, avoid direct sunlight to prevent fading.",
+  "Leather": "Wipe with a dry cloth, condition every 6-12 months.",
+  "Solid Wood": "Dust regularly, use coasters, and avoid direct exposure to heat and sunlight.",
+  "Engineered Wood": "Wipe with a slightly damp cloth and dry immediately. Do not use abrasive cleaners.",
+  "Fabric": "Vacuum regularly. Spot clean stains immediately with mild detergent.",
+  "Metal": "Wipe with a soft dry cloth. Avoid harsh chemicals."
+}
+
+export default function ProductDetailClient({ 
+  product, 
+  relatedProducts = [] 
+}: { 
+  product: Product, 
+  relatedProducts?: RelatedProduct[] 
+}) {
+  const [activeImage, setActiveImage] = useState(product.imageUrls[0] || null)
+  const [isEnquiryOpen, setIsEnquiryOpen] = useState(false)
+  const [enquirySuccess, setEnquirySuccess] = useState(false)
+  const [recentlyViewed, setRecentlyViewed] = useState<RelatedProduct[]>([])
+
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const onTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > 50;
+    const isRightSwipe = distance < -50;
+
+    if (isLeftSwipe) {
+      handleNextImage();
+    }
+    if (isRightSwipe) {
+      handlePreviousImage();
+    }
+  };
+
+  const handlePreviousImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (!activeImage) return;
+    const currentIndex = product.imageUrls.indexOf(activeImage);
+    if (currentIndex > 0) {
+      setActiveImage(product.imageUrls[currentIndex - 1]);
+    } else {
+      setActiveImage(product.imageUrls[product.imageUrls.length - 1]);
+    }
+  };
+
+  const handleNextImage = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
+    if (!activeImage) return;
+    const currentIndex = product.imageUrls.indexOf(activeImage);
+    if (currentIndex < product.imageUrls.length - 1) {
+      setActiveImage(product.imageUrls[currentIndex + 1]);
+    } else {
+      setActiveImage(product.imageUrls[0]);
+    }
+  };
+
+  const isAvailable = product.inStock
+  const isFurniture = product.category?.name?.toLowerCase().includes('furniture')
+
+  // Combine whatsInTheBox into specs if it's not empty, so it renders in the accordion
+  const enhancedSpecs = { ...product.specs }
+  if (product.whatsInTheBox && product.whatsInTheBox.length > 0) {
+    enhancedSpecs["What's in the box"] = product.whatsInTheBox
+  }
+
+  // Handle recently viewed logic
+  useEffect(() => {
+    try {
+      const stored = localStorage.getItem('recentlyViewed')
+      let items: RelatedProduct[] = stored ? JSON.parse(stored) : []
+      
+      // Remove this product if it's already in the list
+      items = items.filter(p => p.id !== product.id)
+      
+      // Prepare the current product to be stored
+      const currentProduct: RelatedProduct = {
+        id: product.id,
+        name: product.name,
+        brand: product.brand,
+        imageUrls: product.imageUrls,
+        inStock: product.inStock
+      }
+      
+      // Add to beginning and take top 10
+      const updatedItems = [currentProduct, ...items].slice(0, 10)
+      
+      localStorage.setItem('recentlyViewed', JSON.stringify(updatedItems))
+      
+      // For display, we want to show the OTHER recently viewed items (not the current one)
+      setRecentlyViewed(items.slice(0, 10))
+    } catch (e) {
+      console.error("Could not parse recently viewed items from local storage", e)
+    }
+  }, [product.id])
+
+  const renderProductCard = (p: RelatedProduct) => (
+    <Link key={p.id} href={`/product/${p.id}`} className="group block h-full">
+      <div className="bg-white border rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition flex flex-col h-full">
+        <div className="aspect-square bg-gray-50 relative overflow-hidden flex items-center justify-center p-4">
+          {p.imageUrls[0] ? (
+            <img src={p.imageUrls[0]} alt={p.name} className="object-contain w-full h-full mix-blend-multiply group-hover:scale-105 transition duration-300" />
+          ) : (
+            <span className="text-gray-300 text-xs">No Image</span>
+          )}
+        </div>
+        <div className="p-4 flex flex-col flex-grow">
+          <span className="text-[10px] font-bold tracking-wider text-gray-400 uppercase mb-1">{p.brand}</span>
+          <h3 className="font-medium text-gray-900 text-sm mb-2 line-clamp-2 flex-grow">{p.name}</h3>
+          <div className="mt-auto pt-2">
+            <span className={`px-2 py-1 rounded text-[10px] font-bold ${p.inStock ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
+              {p.inStock ? "In Stock" : "Out of Stock"}
+            </span>
+          </div>
+        </div>
+      </div>
+    </Link>
+  )
+
+  return (
+    <div className="bg-gray-50 min-h-screen py-8">
+      <div className="container mx-auto px-4">
+        
+        {/* Breadcrumb & Back */}
+        <div className="mb-6 flex items-center justify-between">
+          <Link href={product.store?.name ? `/${product.store.name.toLowerCase()}` : '/'} className="inline-flex items-center text-sm font-medium text-gray-500 hover:text-gray-900 transition">
+            <ArrowLeft className="w-4 h-4 mr-2" />
+            Back to {product.store?.name || 'Store'}
+          </Link>
+          <div className="text-sm text-gray-400">
+            {product.category?.name || 'Uncategorized'}
+          </div>
+        </div>
+
+        <div className="bg-white rounded-2xl shadow-sm border overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 md:gap-8">
+            
+            {/* Image Gallery */}
+            <div className="p-8 border-b md:border-b-0 md:border-r border-gray-100 flex flex-col md:flex-row gap-6 items-center md:items-start justify-start lg:justify-center">
+              
+              {/* Thumbnails */}
+              {product.imageUrls.length > 1 && (
+                <div className="flex md:flex-col flex-nowrap overflow-x-auto md:overflow-y-auto w-full md:w-auto flex-shrink-0 justify-start gap-4 pb-4 md:pb-0 md:pr-2 order-2 md:order-1 max-h-[400px] scrollbar-hide">
+                  {product.imageUrls.map((url, idx) => (
+                    <button 
+                      key={idx} 
+                      onClick={() => setActiveImage(url)}
+                      className={`w-16 h-16 rounded-lg border-2 overflow-hidden flex-shrink-0 transition-all ${activeImage === url ? 'border-blue-500 shadow-sm ring-1 ring-blue-100 ring-offset-1' : 'border-gray-200 opacity-70 hover:opacity-100'}`}
+                    >
+                      <img src={url} alt={`Thumbnail ${idx+1}`} className="object-cover w-full h-full" />
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              <div 
+                className="aspect-square relative bg-white rounded-xl w-full max-w-[400px] border border-gray-100 shadow-sm order-1 md:order-2 flex-shrink-0"
+                onTouchStart={onTouchStart}
+                onTouchMove={onTouchMove}
+                onTouchEnd={onTouchEnd}
+              >
+                {activeImage ? (
+                  <Dialog>
+                    <DialogTrigger className="w-full h-full absolute inset-0 outline-none p-4 cursor-zoom-in hover:bg-gray-50/50 rounded-xl transition-colors group">
+                      <img src={activeImage} alt={product.name} className="object-contain w-full h-full group-hover:scale-105 transition-transform duration-300" />
+                    </DialogTrigger>
+                    <DialogContent className="max-w-[95vw] md:max-w-[90vw] w-full max-h-[95vh] md:max-h-[90vh] h-full p-2 md:p-6 bg-white flex flex-col rounded-3xl" showCloseButton={true}>
+                      <DialogHeader className="sr-only">
+                        <DialogTitle>Product Image</DialogTitle>
+                      </DialogHeader>
+                      <div 
+                        className="w-full flex-grow relative flex items-center justify-center overflow-hidden mb-4 min-h-0"
+                        onTouchStart={onTouchStart}
+                        onTouchMove={onTouchMove}
+                        onTouchEnd={onTouchEnd}
+                      >
+                        {product.imageUrls.length > 1 && (
+                          <button 
+                            onClick={handlePreviousImage}
+                            className="absolute left-4 md:left-8 top-1/2 -translate-y-1/2 bg-white text-gray-900 p-3 md:p-4 rounded-full shadow-md hover:shadow-lg transition-shadow z-10 outline-none border border-gray-100"
+                          >
+                            <ChevronLeft className="w-6 h-6 md:w-8 md:h-8" />
+                          </button>
+                        )}
+                        <img src={activeImage} alt={product.name} className="object-contain max-w-full max-h-full select-none mix-blend-darken" draggable={false} />
+                        {product.imageUrls.length > 1 && (
+                          <button 
+                            onClick={handleNextImage}
+                            className="absolute right-4 md:right-8 top-1/2 -translate-y-1/2 bg-white text-gray-900 p-3 md:p-4 rounded-full shadow-md hover:shadow-lg transition-shadow z-10 outline-none border border-gray-100"
+                          >
+                            <ChevronRight className="w-6 h-6 md:w-8 md:h-8" />
+                          </button>
+                        )}
+                      </div>
+                      
+                      {/* Thumbnails below main image */}
+                      {product.imageUrls.length > 1 && (
+                        <div className="flex-shrink-0 flex justify-center overflow-x-auto gap-4 px-2 scrollbar-hide w-full max-w-full py-1">
+                          {product.imageUrls.map((url, idx) => (
+                            <button 
+                              key={idx} 
+                              onClick={() => setActiveImage(url)}
+                              className={`w-16 h-16 md:w-20 md:h-20 rounded-xl border-2 overflow-hidden flex-shrink-0 transition-all ${activeImage === url ? 'border-blue-500 shadow-md ring-2 ring-blue-100 ring-offset-1' : 'border-gray-200 opacity-60 hover:opacity-100 hover:border-gray-300'}`}
+                            >
+                              <img src={url} alt={`Thumbnail ${idx+1}`} className="object-cover w-full h-full" />
+                            </button>
+                          ))}
+                        </div>
+                      )}
+                    </DialogContent>
+                  </Dialog>
+                ) : (
+                  <div className="w-full h-full bg-gray-50 flex items-center justify-center text-gray-400 absolute inset-0 rounded-xl">
+                    No Image Available
+                  </div>
+                )}
+              </div>
+            </div>
+
+            {/* Product Info */}
+            <div className="p-8 flex flex-col">
+              <div className="mb-2">
+                <span className="text-sm font-bold tracking-widest text-blue-600 uppercase">{product.brand}</span>
+              </div>
+              <h1 className="text-3xl font-bold text-gray-900 mb-4 leading-tight">{product.name}</h1>
+              
+
+              <div className="flex items-center gap-2 mb-8 pb-8 border-b border-gray-100">
+                {isAvailable ? (
+                  <span className="inline-flex items-center px-3 py-1 rounded-full bg-green-50 text-green-700 text-sm font-semibold">
+                    <CheckCircle2 className="w-4 h-4 mr-1.5" /> In Stock
+                  </span>
+                ) : (
+                  <span className="inline-flex items-center px-3 py-1 rounded-full bg-red-50 text-red-700 text-sm font-semibold">
+                    <XCircle className="w-4 h-4 mr-1.5" /> Out of Stock
+                  </span>
+                )}
+                <span className="text-gray-400 text-sm">|</span>
+                <span className="text-gray-500 text-sm">Product Code: {product.id.slice(0, 8).toUpperCase()}</span>
+              </div>
+
+              {isFurniture && (product.material || product.color || product.dimensions) && (
+                <div className="mb-8 grid grid-cols-2 gap-4 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                  {product.dimensions && (
+                    <div className="col-span-2">
+                      <span className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Dimensions</span>
+                      <span className="text-gray-900 font-medium">{product.dimensions}</span>
+                    </div>
+                  )}
+                  {product.material && (
+                    <div>
+                      <span className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Material</span>
+                      <span className="text-gray-900 font-medium">{product.material}</span>
+                    </div>
+                  )}
+                  {product.color && (
+                    <div>
+                      <span className="block text-xs font-bold text-gray-500 uppercase tracking-wider mb-1">Color</span>
+                      <span className="text-gray-900 font-medium">{product.color}</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              <div className="mb-8 flex-grow">
+                <h3 className="text-lg font-bold mb-3">Product Description</h3>
+                
+                {/* 1. New Structured Description */}
+                {(product.features?.length > 0 || product.description) ? (
+                  <div className="text-gray-600 leading-relaxed">
+                    {product.description && (
+                      <div 
+                        className={`mb-6 ${
+                          "break-words max-w-full overflow-hidden " +
+                          "[&_ul]:list-disc [&_ul]:ml-5 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:ml-5 [&_ol]:mb-4 " +
+                          "[&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-3 [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mb-2 " +
+                          "[&_p]:mb-4 [&_p]:text-justify [&_strong]:font-bold text-justify " +
+                          "[&_table]:w-full [&_table]:border-collapse [&_table]:mb-6 [&_table]:text-sm [&_table]:rounded-md [&_table]:overflow-hidden " +
+                          "[&_th]:border [&_th]:border-gray-200 [&_th]:px-4 [&_th]:py-3 [&_th]:bg-gray-50 [&_th]:font-bold [&_th]:text-left " +
+                          "[&_td]:border [&_td]:border-gray-200 [&_td]:px-4 [&_td]:py-3 [&_td]:align-top"
+                        }`}
+                        dangerouslySetInnerHTML={{ __html: formatSquashedText(product.description) }} 
+                      />
+                    )}
+                    
+                    {product.features?.length > 0 && (
+                      <div>
+                        <h4 className="font-bold text-gray-900 mb-3 uppercase tracking-wide text-sm">About this item</h4>
+                        <ul className="space-y-2">
+                          {product.features.map((feature, idx) => (
+                            <li key={idx} className="flex gap-3">
+                              <span className="text-green-500 font-bold mt-0.5">✓</span>
+                              <span dangerouslySetInnerHTML={{ __html: feature }} />
+                            </li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    
+                    <div className="mt-8">
+                      {isFurniture ? <FurnitureTrustBadges specs={product.specs} /> : <TrustBadges specs={product.specs} />}
+                    </div>
+                  </div>
+                ) : (
+                  // 2. Legacy Description Fallback
+                  product.legacyDescription ? (
+                    (() => {
+                      const desc = formatSquashedText(product.legacyDescription);
+                      
+                      const baseClasses = "text-gray-600 leading-relaxed break-words max-w-full overflow-hidden " +
+                        "[&_ul]:list-disc [&_ul]:ml-5 [&_ul]:mb-4 [&_ol]:list-decimal [&_ol]:ml-5 [&_ol]:mb-4 " +
+                        "[&_h1]:text-2xl [&_h1]:font-bold [&_h1]:mb-3 [&_h2]:text-xl [&_h2]:font-bold [&_h2]:mb-3 [&_h3]:text-lg [&_h3]:font-bold [&_h3]:mb-2 " +
+                        "[&_p]:mb-4 [&_p]:text-justify [&_strong]:font-bold text-justify " +
+                        "[&_table]:w-full [&_table]:border-collapse [&_table]:mb-6 [&_table]:text-sm [&_table]:rounded-md [&_table]:overflow-hidden " +
+                        "[&_th]:border [&_th]:border-gray-200 [&_th]:px-4 [&_th]:py-3 [&_th]:bg-gray-50 [&_th]:font-bold [&_th]:text-left " +
+                        "[&_td]:border [&_td]:border-gray-200 [&_td]:px-4 [&_td]:py-3 [&_td]:align-top";
+                        
+                      const commonClassName = `${baseClasses} ${!desc.includes('<p>') && !desc.includes('<br') ? 'whitespace-pre-wrap' : ''}`;
+
+                      return (
+                        <>
+                          <div dangerouslySetInnerHTML={{ __html: desc }} className={commonClassName} />
+                          <div className="my-8">
+                            {isFurniture ? <FurnitureTrustBadges specs={product.specs} /> : <TrustBadges specs={product.specs} />}
+                          </div>
+                        </>
+                      )
+                    })()
+                  ) : (
+                    // 3. No Description
+                    <>
+                      <p className="text-gray-600 leading-relaxed mb-8">No description provided.</p>
+                      {isFurniture ? <FurnitureTrustBadges specs={product.specs} /> : <TrustBadges specs={product.specs} />}
+                    </>
+                  )
+                )}
+              </div>
+
+              {/* Specifications */}
+
+              {enhancedSpecs && typeof enhancedSpecs === 'object' && Object.keys(enhancedSpecs).length > 0 && (
+                <ProductInformation specs={enhancedSpecs} />
+              )}
+
+              {/* Care Instructions */}
+              {isFurniture && (
+                <div className="mt-6 p-4 bg-gray-50 border border-gray-100 rounded-xl">
+                  <h4 className="text-sm font-bold text-gray-900 mb-2 uppercase tracking-wide">Care Instructions</h4>
+                  <p className="text-sm text-gray-600 leading-relaxed">
+                    {product.material && materialCareNotes[product.material] 
+                      ? materialCareNotes[product.material]
+                      : "To keep this piece looking its best, we recommend regular light dusting. Wipe any spills immediately with a soft, dry cloth. Avoid harsh chemicals or abrasive cleaners."}
+                  </p>
+                </div>
+              )}
+
+              <div className="mt-auto pt-6 flex flex-col sm:flex-row gap-4">
+                {isFurniture && (
+                  <WhatsAppCustomButton 
+                    productName={product.name} 
+                    productCode={product.id} 
+                  />
+                )}
+                <Dialog open={isEnquiryOpen} onOpenChange={setIsEnquiryOpen}>
+                  <DialogTrigger className="flex-1 bg-blue-600 hover:bg-blue-700 text-white px-8 py-4 rounded-xl font-bold text-lg transition flex items-center justify-center">
+                    <MessageSquare className="w-5 h-5 mr-2" /> Enquire Now
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-md">
+                    <DialogHeader>
+                      <DialogTitle>Send Enquiry</DialogTitle>
+                    </DialogHeader>
+                    {enquirySuccess ? (
+                      <div className="py-6 text-center">
+                        <div className="w-16 h-16 bg-green-100 text-green-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                          <CheckCircle2 className="w-8 h-8" />
+                        </div>
+                        <h3 className="text-xl font-bold mb-2">Enquiry Sent!</h3>
+                        <p className="text-gray-600">Thank you for your interest. Our team will contact you shortly.</p>
+                        <Button className="mt-6 w-full" onClick={() => setIsEnquiryOpen(false)}>Close</Button>
+                      </div>
+                    ) : (
+                      <EnquiryForm 
+                        productId={product.id} 
+                        productName={product.name} 
+                        onSuccess={() => setEnquirySuccess(true)} 
+                      />
+                    )}
+                  </DialogContent>
+                </Dialog>
+
+                <button className="sm:w-auto w-full bg-gray-100 hover:bg-gray-200 text-gray-900 px-6 py-4 rounded-xl font-bold text-lg transition flex items-center justify-center">
+                  <Share2 className="w-5 h-5" />
+                </button>
+              </div>
+              <p className="text-xs text-center sm:text-left text-gray-400 mt-4">
+                Enquiring reserves this item for you. Payment is completed in-store.
+              </p>
+
+            </div>
+          </div>
+        </div>
+
+        {/* You Might Also Like */}
+        {relatedProducts.length > 0 && (
+          <div className="mt-16">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">You Might Also Like</h2>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
+              {relatedProducts.map(renderProductCard)}
+            </div>
+          </div>
+        )}
+
+        {/* Recently Viewed */}
+        {recentlyViewed.length > 0 && (
+          <div className="mt-16">
+            <h2 className="text-2xl font-bold text-gray-900 mb-6">Recently Viewed</h2>
+            <div className="flex overflow-x-auto gap-4 md:gap-6 pb-4 scrollbar-hide -mx-4 px-4 md:mx-0 md:px-0">
+              {recentlyViewed.map((p) => (
+                <div key={`wrapper-${p.id}`} className="flex-shrink-0 w-[200px] md:w-[280px]">
+                  {renderProductCard(p)}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
+      </div>
+    </div>
+  )
+}

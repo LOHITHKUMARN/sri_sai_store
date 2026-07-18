@@ -1,0 +1,108 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Store {
+  id         String     @id @default(uuid())
+  name       String // "Appliances" or "Furniture"
+  categories Category[]
+  products   Product[]
+}
+
+model Category {
+  id       String    @id @default(uuid())
+  storeId  String?
+  name     String
+  store    Store?    @relation(fields: [storeId], references: [id])
+  products Product[]
+}
+
+model Product {
+  id                String   @id @default(uuid())
+  storeId           String?
+  categoryId        String?
+  name              String
+  brand             String?
+  description       String?
+  legacyDescription String?
+  features          String[]
+  whatsInTheBox     String[]
+  price             Float?
+  stockQuantity     Int      @default(0)
+  inStock           Boolean  @default(true)
+  imageUrls         String[]
+  specs             Json?
+  material          String?
+  color             String?
+  dimensions        String?
+  status            String   @default("PUBLISHED") // "DRAFT" or "PUBLISHED"
+  isFeatured        Boolean  @default(false)
+  featuredOrder     Int      @default(0)
+  isBestSeller      Boolean  @default(false)
+  bestSellerOrder   Int      @default(0)
+  featuredAt        DateTime?
+  createdAt         DateTime @default(now())
+
+  store     Store?    @relation(fields: [storeId], references: [id])
+  category  Category? @relation(fields: [categoryId], references: [id])
+  enquiries Enquiry[]
+  visits    Visit[]
+}
+
+model Enquiry {
+  id             String   @id @default(uuid())
+  name           String
+  phone          String
+  preferWhatsapp Boolean  @default(false)
+  message        String?
+  productId      String?
+  storeType      String
+  status         String   @default("new") // new, contacted, closed
+  sessionId      String?
+  createdAt      DateTime @default(now())
+
+  product Product? @relation(fields: [productId], references: [id])
+}
+
+model Visit {
+  id        String   @id @default(uuid())
+  sessionId String
+  pageUrl   String
+  productId String?
+  storeType String?
+  createdAt DateTime @default(now())
+
+  product Product? @relation(fields: [productId], references: [id])
+}
+
+model AdminUser {
+  id           String   @id @default(uuid())
+  username     String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+model HeroImage {
+  id        String   @id @default(uuid())
+  store     String   // "Appliances" or "Furniture"
+  url       String
+  publicId  String?  // Cloudinary public ID for cleanup on delete
+  order     Int      @default(0)
+  createdAt DateTime @default(now())
+}
+
+model BrandLogo {
+  id        String   @id @default(uuid())
+  name      String
+  store     String   // "Appliances" or "Furniture"
+  url       String
+  publicId  String?  // Cloudinary public ID for cleanup on delete
+  order     Int      @default(0)
+  size      String   @default("medium") // "small", "medium", "large", "xlarge"
+  createdAt DateTime @default(now())
+}
