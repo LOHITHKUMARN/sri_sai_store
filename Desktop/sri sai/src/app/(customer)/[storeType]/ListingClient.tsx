@@ -177,14 +177,14 @@ export default function ListingClient({
   }, [searchQuery, searchParams, pathname, router])
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false)
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>("list")
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>("grid")
 
   useEffect(() => {
     const savedMode = localStorage.getItem('productViewMode')
     if (savedMode === 'grid' || savedMode === 'list') {
       setViewMode(savedMode)
     } else {
-      setViewMode('list')
+      setViewMode('grid')
     }
   }, [])
 
@@ -716,21 +716,31 @@ export default function ListingClient({
                 <Link key={product.id} href={`/product/${product.id}`} className="group block">
                   {viewMode === 'grid' ? (
                     <div className="bg-white dark:bg-slate-950 border dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition flex flex-col h-full">
-                      <div className="aspect-square bg-white relative overflow-hidden flex items-center justify-center p-6 border-b dark:border-slate-800">
+                      <div className="w-full aspect-square bg-white relative overflow-hidden flex items-center justify-center p-6 border-b dark:border-slate-800">
                         {product.imageUrls[0] ? (
                           <img src={product.imageUrls[0]} alt={product.name} className="object-contain w-full h-full mix-blend-multiply group-hover:scale-105 transition duration-300" />
                         ) : (
-                          <span className="text-gray-400 font-medium">No Image</span>
+                          <span className="text-gray-400 font-medium text-xs sm:text-sm">No Image</span>
+                        )}
+                        {(product.isBestSeller || product.isFeatured) && (
+                          <div className="absolute top-2 left-2 flex flex-col gap-1 z-10">
+                            {product.isBestSeller && <span className="bg-amber-500 text-white text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded shadow-sm">Best Seller</span>}
+                            {product.isFeatured && !product.isBestSeller && <span className="bg-blue-600 text-white text-[10px] sm:text-xs font-bold px-2 py-0.5 rounded shadow-sm">Featured</span>}
+                          </div>
                         )}
                       </div>
                       <div className="p-5 flex flex-col flex-grow">
-                        <span className="text-xs font-semibold tracking-wider text-gray-400 dark:text-gray-500 uppercase mb-1">{product.brand}</span>
-                        <h3 className="font-medium text-gray-900 dark:text-gray-100 mb-2 line-clamp-2 flex-grow">{product.name}</h3>
-                        <div className="flex items-center justify-between mt-auto pt-4 border-t dark:border-slate-800/50">
-                          <span className={`px-2 py-1 rounded text-xs font-bold ${product.inStock ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"}`}>
+                        {product.brand && (
+                          <span className="text-[10px] font-semibold tracking-wider text-gray-400 dark:text-gray-500 uppercase mb-1">{product.brand}</span>
+                        )}
+                        <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-4 line-clamp-2 uppercase text-sm sm:text-base flex-grow">{product.name}</h3>
+                        <div className="flex items-center justify-between mt-auto pt-4 border-t dark:border-slate-800">
+                          <span className={`px-2.5 py-1 rounded text-xs font-bold ${product.inStock ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"}`}>
                             {product.inStock ? "In Stock" : "Out of Stock"}
                           </span>
-                          <span className="bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full text-xs font-medium">View</span>
+                          <span className="bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-3.5 py-1 rounded-full text-xs font-medium">
+                            View
+                          </span>
                         </div>
                       </div>
                     </div>

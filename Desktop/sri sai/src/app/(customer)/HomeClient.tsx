@@ -375,34 +375,30 @@ export default function HomeClient({
                 View all <ArrowRight className="ml-2 w-4 h-4" />
               </Link>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
               {bestSellerProducts.slice(0, 4).map((product, i) => (
                 <Link key={product.id + '-bs'} href={`/product/${product.id}`} className="group block relative">
-                  <div className="bg-white dark:bg-slate-900 rounded-[20px] overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.05),0_12px_32px_rgba(0,0,0,0.06)] transition-all duration-300 flex flex-col h-full border border-black/[0.03] dark:border-white/10 transform group-hover:-translate-y-1">
-                    <div className="w-full aspect-[4/3] h-auto bg-white relative overflow-hidden flex items-center justify-center p-8">
+                  <div className="bg-white dark:bg-slate-950 border dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition flex flex-col h-full">
+                    <div className="w-full aspect-square bg-white relative overflow-hidden flex items-center justify-center p-6 border-b dark:border-slate-800">
                       {product.imageUrls && product.imageUrls.length > 0 ? (
-                         <img src={product.imageUrls[0]} alt={product.name} className="object-contain w-full h-full mix-blend-multiply group-hover:scale-[1.03] transition-transform duration-700 ease-out" />
+                         <img src={product.imageUrls[0]} alt={product.name} className="object-contain w-full h-full mix-blend-multiply group-hover:scale-105 transition duration-300" />
                       ) : (
-                         <img src={placeholderImages[(i + 2) % placeholderImages.length]} alt={product.name} className="object-cover w-full h-full group-hover:scale-[1.03] transition-transform duration-700 ease-out" />
+                         <span className="text-gray-400 font-medium text-xs sm:text-sm">No Image</span>
                       )}
                     </div>
-                    <div className="p-5 flex flex-col flex-grow border-t border-stone-50 dark:border-slate-800">
-                      <div className="flex items-center gap-2 mb-1">
-                        {product.brand && (
-                          <span className="text-[10px] font-medium tracking-widest text-slate-400 uppercase">{product.brand}</span>
-                        )}
-                      </div>
-                      <h3 className="font-medium text-slate-900 dark:text-white mb-4 line-clamp-2 capitalize text-base flex-grow">{product.name.toLowerCase()}</h3>
+                    <div className="p-5 flex flex-col flex-grow">
+                      {product.brand && (
+                        <span className="text-[10px] font-semibold tracking-wider text-gray-400 dark:text-gray-500 uppercase mb-1">{product.brand}</span>
+                      )}
+                      <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-4 line-clamp-2 uppercase text-sm sm:text-base flex-grow">{product.name}</h3>
 
-                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
-                        <span className="text-xs font-medium flex items-center text-slate-500 dark:text-slate-400">
-                          <span className={`w-1.5 h-1.5 rounded-full mr-2 ${product.inStock ? "bg-emerald-400" : "bg-rose-400"}`}></span>
-                          {product.inStock ? "In stock" : "Out of stock"}
+                      <div className="flex items-center justify-between mt-auto pt-4 border-t dark:border-slate-800">
+                        <span className={`px-2.5 py-1 rounded text-xs font-bold ${product.inStock ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"}`}>
+                          {product.inStock ? "In Stock" : "Out of Stock"}
                         </span>
-                        
-                        <div className="w-8 h-8 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center group-hover:border-slate-900 dark:group-hover:border-white group-hover:bg-slate-900 dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-slate-900 text-slate-400 transition-colors">
-                          <ArrowRight strokeWidth={1.5} className="w-4 h-4" />
-                        </div>
+                        <span className="bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full text-xs font-medium">
+                          View
+                        </span>
                       </div>
                     </div>
                   </div>
