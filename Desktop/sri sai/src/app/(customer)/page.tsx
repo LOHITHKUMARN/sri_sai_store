@@ -6,68 +6,64 @@ const commonSelect = {
 }
 
 export default async function HomePage() {
-  const [
-    featuredAppliances,
-    bestSellerAppliances,
-    newLaunchAppliances,
-    featuredFurniture,
-    bestSellerFurniture,
-    newLaunchFurniture,
-    categories,
-    heroImages,
-    brandLogos
-  ] = await Promise.all([
-    // Appliances
-    prisma.product.findMany({
-      where: { status: 'PUBLISHED', store: { name: 'Appliances' } },
-      take: 7,
-      orderBy: [{ isFeatured: 'desc' }, { featuredOrder: 'asc' }, { createdAt: 'desc' }],
-      select: commonSelect
-    }),
-    prisma.product.findMany({
-      where: { status: 'PUBLISHED', store: { name: 'Appliances' } },
-      take: 4,
-      orderBy: [{ isBestSeller: 'desc' }, { bestSellerOrder: 'asc' }, { createdAt: 'desc' }],
-      select: commonSelect
-    }),
-    prisma.product.findMany({
-      where: { status: 'PUBLISHED', store: { name: 'Appliances' } },
-      take: 4,
-      orderBy: { createdAt: 'desc' },
-      select: commonSelect
-    }),
-    // Furniture
-    prisma.product.findMany({
-      where: { status: 'PUBLISHED', store: { name: 'Furniture' } },
-      take: 7,
-      orderBy: [{ isFeatured: 'desc' }, { featuredOrder: 'asc' }, { createdAt: 'desc' }],
-      select: commonSelect
-    }),
-    prisma.product.findMany({
-      where: { status: 'PUBLISHED', store: { name: 'Furniture' } },
-      take: 4,
-      orderBy: [{ isBestSeller: 'desc' }, { bestSellerOrder: 'asc' }, { createdAt: 'desc' }],
-      select: commonSelect
-    }),
-    prisma.product.findMany({
-      where: { status: 'PUBLISHED', store: { name: 'Furniture' } },
-      take: 4,
-      orderBy: { createdAt: 'desc' },
-      select: commonSelect
-    }),
-    // Categories
-    prisma.category.findMany({
-      include: { store: true }
-    }),
-    // Hero Images
-    prisma.heroImage.findMany({
-      orderBy: { order: 'asc' }
-    }),
-    // Brand Logos
-    prisma.brandLogo.findMany({
-      orderBy: { order: 'asc' }
-    })
-  ])
+  // Appliances
+  const featuredAppliances = await prisma.product.findMany({
+    where: { status: 'PUBLISHED', store: { name: 'Appliances' } },
+    take: 7,
+    orderBy: [{ isFeatured: 'desc' }, { featuredOrder: 'asc' }, { createdAt: 'desc' }],
+    select: commonSelect
+  })
+
+  const bestSellerAppliances = await prisma.product.findMany({
+    where: { status: 'PUBLISHED', store: { name: 'Appliances' } },
+    take: 4,
+    orderBy: [{ isBestSeller: 'desc' }, { bestSellerOrder: 'asc' }, { createdAt: 'desc' }],
+    select: commonSelect
+  })
+
+  const newLaunchAppliances = await prisma.product.findMany({
+    where: { status: 'PUBLISHED', store: { name: 'Appliances' } },
+    take: 4,
+    orderBy: { createdAt: 'desc' },
+    select: commonSelect
+  })
+
+  // Furniture
+  const featuredFurniture = await prisma.product.findMany({
+    where: { status: 'PUBLISHED', store: { name: 'Furniture' } },
+    take: 7,
+    orderBy: [{ isFeatured: 'desc' }, { featuredOrder: 'asc' }, { createdAt: 'desc' }],
+    select: commonSelect
+  })
+
+  const bestSellerFurniture = await prisma.product.findMany({
+    where: { status: 'PUBLISHED', store: { name: 'Furniture' } },
+    take: 4,
+    orderBy: [{ isBestSeller: 'desc' }, { bestSellerOrder: 'asc' }, { createdAt: 'desc' }],
+    select: commonSelect
+  })
+
+  const newLaunchFurniture = await prisma.product.findMany({
+    where: { status: 'PUBLISHED', store: { name: 'Furniture' } },
+    take: 4,
+    orderBy: { createdAt: 'desc' },
+    select: commonSelect
+  })
+
+  // Categories
+  const categories = await prisma.category.findMany({
+    include: { store: true }
+  })
+
+  // Hero Images
+  const heroImages = await prisma.heroImage.findMany({
+    orderBy: { order: 'asc' }
+  })
+
+  // Brand Logos
+  const brandLogos = await prisma.brandLogo.findMany({
+    orderBy: { order: 'asc' }
+  })
   
   const applianceCategories = categories.filter(c => c.store?.name === "Appliances")
   const furnitureCategories = categories.filter(c => c.store?.name === "Furniture")

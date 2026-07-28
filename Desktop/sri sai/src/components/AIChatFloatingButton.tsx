@@ -126,7 +126,7 @@ export function AIChatFloatingButton() {
 
       {/* Chat Window */}
       <div
-        className={`fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-3rem)] h-[580px] max-h-[calc(100vh-6rem)] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden transition-all duration-300 origin-bottom-right border border-gray-100 ${
+        className={`fixed bottom-6 right-6 z-50 w-[360px] max-w-[calc(100vw-3rem)] h-[580px] max-h-[calc(100vh-6rem)] bg-white dark:bg-slate-900 rounded-2xl shadow-2xl flex flex-col overflow-hidden transition-all duration-300 origin-bottom-right border border-gray-100 dark:border-slate-800 ${
           isOpen ? "scale-100 opacity-100" : "scale-0 opacity-0 pointer-events-none"
         }`}
       >
@@ -161,7 +161,7 @@ export function AIChatFloatingButton() {
         </div>
 
         {/* Message List */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-5 bg-slate-50 relative">
+        <div className="flex-1 overflow-y-auto p-4 space-y-5 bg-slate-50 dark:bg-slate-950 relative">
           {messages.map((msg, index) => {
             const isBot = msg.type === "bot";
             // Check if this message is the last one in the array
@@ -173,7 +173,7 @@ export function AIChatFloatingButton() {
                   <div
                     className={`max-w-[85%] px-4 py-3 rounded-2xl text-[15px] leading-relaxed shadow-sm ${
                       isBot
-                        ? "bg-white text-slate-800 border border-slate-100 rounded-tl-sm"
+                        ? "bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-100 border border-slate-100 dark:border-slate-700 rounded-tl-sm"
                         : "bg-blue-600 text-white rounded-tr-sm"
                     }`}
                   >
@@ -190,8 +190,8 @@ export function AIChatFloatingButton() {
                         onClick={() => handleOptionClick(opt)}
                         className={`text-left px-4 py-3 rounded-xl text-sm border transition-colors shadow-sm ${
                           isLast
-                            ? "bg-white border-blue-200 text-blue-700 hover:bg-blue-50 hover:border-blue-300"
-                            : "bg-gray-50 border-gray-200 text-gray-500"
+                            ? "bg-white dark:bg-slate-900 border-blue-200 dark:border-blue-900/50 text-blue-700 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-slate-800 hover:border-blue-300 dark:hover:border-blue-800"
+                            : "bg-gray-50 dark:bg-slate-900/50 border-gray-200 dark:border-slate-800 text-gray-500 dark:text-gray-400"
                         }`}
                       >
                         {opt.label}
@@ -203,7 +203,7 @@ export function AIChatFloatingButton() {
                 {/* WhatsApp Handoff */}
                 {msg.showWhatsApp && (
                   <div className={`mt-3 w-full max-w-[85%] ${isLast ? "" : "opacity-50 pointer-events-none"}`}>
-                    <div className="text-xs text-slate-500 mb-2 px-1">Still have questions?</div>
+                    <div className="text-xs text-slate-500 dark:text-slate-400 mb-2 px-1">Still have questions?</div>
                     <a
                       href={`https://wa.me/919876543210?text=${encodeURIComponent("Hi, I need some help.")}`}
                       target="_blank"

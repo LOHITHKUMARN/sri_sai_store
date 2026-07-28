@@ -18,11 +18,11 @@ const ReactQuill = dynamic(() => import('react-quill-new'), { ssr: false })
 import 'react-quill-new/dist/quill.snow.css'
 
 type Store = { id: string, name: string }
-type Category = { id: string, name: string, storeId: string }
+type Category = { id: string, name: string, storeId: string | null }
 type Product = {
   id: string
   name: string
-  brand: string
+  brand: string | null
   price: number | null
   inStock: boolean
   store: Store | null
@@ -325,7 +325,7 @@ export default function ProductClient({
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="brand">Brand</Label>
-                    <Input id="brand" name="brand" required defaultValue={editingProduct?.brand} placeholder="e.g., Samsung" />
+                    <Input id="brand" name="brand" required defaultValue={editingProduct?.brand || ""} placeholder="e.g., Samsung" />
                   </div>
 
                   <div className="space-y-2">
@@ -580,7 +580,7 @@ export default function ProductClient({
           <button onClick={() => setFilter("DRAFT")} className={`whitespace-nowrap px-4 py-1.5 text-sm font-medium rounded-md transition ${filter === 'DRAFT' ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}>Needs Review</button>
         </div>
         
-        <Select value={storeFilter} onValueChange={setStoreFilter}>
+        <Select value={storeFilter} onValueChange={(val: string | null) => val && setStoreFilter(val)}>
           <SelectTrigger className="w-full sm:w-[200px] bg-white">
             <span className="truncate">
               {storeFilter === "ALL" ? "All Stores" : stores.find(s => s.id === storeFilter)?.name || "Filter by Store"}

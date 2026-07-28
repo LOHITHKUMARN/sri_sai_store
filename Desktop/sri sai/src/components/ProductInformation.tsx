@@ -109,13 +109,13 @@ export function ProductInformation({ specs }: { specs: SpecData }) {
       )}
 
       {whatsInTheBox.length > 0 && (
-        <div className="mt-8 bg-gray-50 rounded-xl p-6 border border-gray-100">
-          <h4 className="font-bold text-gray-900 mb-3">What's in the box</h4>
-          <ul className="list-disc pl-5 text-gray-600 space-y-1">
+        <div className="mt-8 bg-gray-50 dark:bg-slate-900 rounded-xl p-6 border border-gray-100 dark:border-slate-800">
+          <h4 className="font-bold text-gray-900 dark:text-white mb-3">What's in the box</h4>
+          <ul className="list-disc pl-5 text-gray-600 dark:text-gray-300 space-y-1">
             {whatsInTheBox.map((item, idx) => (
               <li key={idx}>
                 {item.label ? (
-                  <><span className="font-medium text-gray-800">{item.label}:</span> {item.value}</>
+                  <><span className="font-medium text-gray-800 dark:text-gray-200">{item.label}:</span> {item.value}</>
                 ) : (
                   <span>{item.value}</span>
                 )}
@@ -132,25 +132,25 @@ function AccordionSection({ title, items }: { title: string, items: { label: str
   const [isOpen, setIsOpen] = useState(false)
 
   return (
-    <div className="border border-gray-200 rounded-xl overflow-hidden bg-white shadow-sm transition-all duration-200">
+    <div className="border border-gray-200 dark:border-slate-800 rounded-xl overflow-hidden bg-white dark:bg-slate-950 shadow-sm transition-all duration-200">
       <button 
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full flex items-center justify-between px-5 py-3.5 bg-gray-50 hover:bg-gray-100 transition text-left"
+        className="w-full flex items-center justify-between px-5 py-3.5 bg-gray-50 hover:bg-gray-100 dark:bg-slate-900 dark:hover:bg-slate-800 transition text-left"
       >
-        <span className="font-bold text-gray-900">{title}</span>
-        {isOpen ? <ChevronUp className="w-5 h-5 text-gray-500 flex-shrink-0" /> : <ChevronDown className="w-5 h-5 text-gray-500 flex-shrink-0" />}
+        <span className="font-bold text-gray-900 dark:text-white">{title}</span>
+        {isOpen ? <ChevronUp className="w-5 h-5 text-gray-500 dark:text-gray-400 flex-shrink-0" /> : <ChevronDown className="w-5 h-5 text-gray-500 dark:text-gray-400 flex-shrink-0" />}
       </button>
       
       <div 
         className={`overflow-hidden transition-all duration-300 ease-in-out ${isOpen ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}
       >
-        <div className="px-5 py-4 border-t border-gray-200">
+        <div className="px-5 py-4 border-t border-gray-200 dark:border-slate-800">
           <table className="w-full text-sm text-left">
             <tbody>
               {items.map((item, idx) => (
-                <tr key={idx} className="border-b border-gray-100 last:border-0">
-                  <th className="py-2.5 pr-4 font-semibold text-gray-900 w-1/3 align-top">{item.label}</th>
-                  <td className="py-2.5 text-gray-600 align-top break-words">{item.value}</td>
+                <tr key={idx} className="border-b border-gray-100 dark:border-slate-800 last:border-0">
+                  <th className="py-2.5 pr-4 font-semibold text-gray-900 dark:text-white w-1/3 align-top">{item.label}</th>
+                  <td className="py-2.5 text-gray-600 dark:text-gray-300 align-top break-words">{item.value}</td>
                 </tr>
               ))}
             </tbody>

@@ -84,3 +84,12 @@ export async function updateBrandLogoSize(id: string, size: string) {
   revalidatePath("/admin/brands");
   revalidatePath("/");
 }
+
+export async function updateBrandLogoInvert(id: string, invertInDark: boolean) {
+  await prisma.brandLogo.update({
+    where: { id },
+    data: { invertInDark }
+  });
+  revalidatePath("/admin/brands");
+  revalidatePath("/");
+}

@@ -48,7 +48,7 @@ export default function HomeClient({
   applianceCategories: Category[]
   furnitureCategories: Category[]
   heroImages: { id: string, url: string, store: string }[]
-  brandLogos: { id: string, name: string, url: string, store: string, order: number, size: string }[]
+  brandLogos: { id: string, name: string, url: string, store: string, order: number, size: string, invertInDark?: boolean }[]
 }) {
   const { activeStore, setActiveStore } = useStore()
 
@@ -92,14 +92,14 @@ export default function HomeClient({
 
 
       {/* Expanding Category Gallery */}
-      <section className="py-16 bg-gray-50">
+      <section className="py-16 bg-gray-50 dark:bg-slate-950">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-end mb-8">
             <div>
-              <h2 className="text-2xl font-bold tracking-tight">Shop {isAppliance ? "Appliances" : "Furniture"} by Category</h2>
-              <p className="text-gray-500 mt-1">Find exactly what you're looking for</p>
+              <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Shop {isAppliance ? "Appliances" : "Furniture"} by Category</h2>
+              <p className="text-gray-500 dark:text-gray-400 mt-1">Find exactly what you're looking for</p>
             </div>
-            <Link href={`/${activeStore}`} className="text-blue-600 font-medium hover:underline">View All</Link>
+            <Link href={`/${activeStore}`} className="text-blue-600 dark:text-blue-400 font-medium hover:underline">View All</Link>
           </div>
           
           {/* Desktop Expanding Gallery (hidden on small screens) */}
@@ -186,18 +186,18 @@ export default function HomeClient({
       </section>
 
       {/* 2. Shop by Room */}
-      <section className="py-16 bg-white border-t">
+      <section className="py-16 bg-white dark:bg-slate-950 border-t dark:border-slate-800">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <h2 className="text-4xl md:text-5xl font-serif text-gray-900 mb-3 font-normal">Shop by room</h2>
-              <p className="text-gray-500 max-w-2xl text-lg font-light tracking-wide">
+              <h2 className="text-4xl md:text-5xl font-serif text-gray-900 dark:text-white mb-3 font-normal">Shop by room</h2>
+              <p className="text-gray-500 dark:text-gray-400 max-w-2xl text-lg font-light tracking-wide">
                 {isAppliance 
                   ? "Discover the perfect appliances for every corner of your home." 
                   : "Curate your perfect living space, room by room."}
               </p>
             </div>
-            <Link href={`/${activeStore}`} className="text-slate-500 font-medium hover:text-slate-900 transition-colors hidden sm:block">View all rooms &rarr;</Link>
+            <Link href={`/${activeStore}`} className="text-slate-500 dark:text-slate-400 font-medium hover:text-slate-900 dark:hover:text-white transition-colors hidden sm:block">View all rooms &rarr;</Link>
           </div>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
             {(isAppliance ? [
@@ -246,10 +246,10 @@ export default function HomeClient({
 
       {/* The Space Gallery */}
       {isAppliance && (
-        <section className="py-24 bg-white overflow-hidden border-t">
+        <section className="py-24 bg-white dark:bg-slate-950 overflow-hidden border-t dark:border-slate-800">
         <div className="text-center mb-12 px-4">
-          <h2 className="text-4xl md:text-5xl font-serif text-slate-900 mb-4">The Space</h2>
-          <p className="text-slate-500 max-w-xl mx-auto italic font-serif text-lg">
+          <h2 className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-white mb-4">The Space</h2>
+          <p className="text-slate-500 dark:text-slate-400 max-w-xl mx-auto italic font-serif text-lg">
             Experience an atmosphere designed for comfort and inspiration.
           </p>
         </div>
@@ -300,16 +300,16 @@ export default function HomeClient({
       )}
 
       {/* Featured Arrivals */}
-      <section className="py-20 bg-[#FAFAF8]">
+      <section className="py-20 bg-[#FAFAF8] dark:bg-slate-950 border-t dark:border-slate-800">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-end mb-12">
             <div>
-              <h2 className="text-4xl md:text-5xl font-serif text-slate-900 mb-3 font-normal">Featured {isAppliance ? "Arrivals" : "Pieces"}</h2>
-              <p className="text-slate-500 text-lg font-light tracking-wide">
+              <h2 className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-white mb-3 font-normal">Featured {isAppliance ? "Arrivals" : "Pieces"}</h2>
+              <p className="text-slate-500 dark:text-slate-400 text-lg font-light tracking-wide">
                 Newly added to our catalog this week
               </p>
             </div>
-            <Link href={`/${activeStore}`} className="text-slate-500 font-medium hover:text-slate-900 transition-colors hidden sm:flex items-center">
+            <Link href={`/${activeStore}`} className="text-slate-500 dark:text-slate-400 font-medium hover:text-slate-900 dark:hover:text-white transition-colors hidden sm:flex items-center">
               View Full Collection <ArrowRight className="ml-2 w-4 h-4" />
             </Link>
           </div>
@@ -317,8 +317,8 @@ export default function HomeClient({
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch">
             {featuredProducts.slice(0, 7).map((product, index) => (
               <Link key={product.id} href={`/product/${product.id}`} className={`group block ${index === 0 ? "sm:col-span-2 lg:col-span-2" : ""}`}>
-                <div className="bg-white rounded-[20px] overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.05),0_12px_32px_rgba(0,0,0,0.06)] transition-all duration-300 flex flex-col h-full border border-black/[0.03]">
-                  <div className={`w-full ${index === 0 ? "aspect-square sm:aspect-[2/1]" : "aspect-square"} bg-gradient-to-b from-slate-50 to-white relative overflow-hidden flex items-center justify-center p-8`}>
+                <div className="bg-white dark:bg-slate-900 rounded-[20px] overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.05),0_12px_32px_rgba(0,0,0,0.06)] transition-all duration-300 flex flex-col h-full border border-black/[0.03] dark:border-white/10">
+                  <div className={`w-full ${index === 0 ? "aspect-square sm:aspect-[2/1]" : "aspect-square"} bg-white relative overflow-hidden flex items-center justify-center p-8`}>
                     {product.imageUrls && product.imageUrls.length > 0 ? (
                       <img src={product.imageUrls[0]} alt={product.name} className="object-contain w-full h-full mix-blend-multiply group-hover:scale-[1.03] transition-transform duration-700 ease-out" />
                     ) : (
@@ -331,18 +331,18 @@ export default function HomeClient({
                         {product.brand}
                       </span>
                     )}
-                    <h3 className="font-medium text-slate-900 mb-4 line-clamp-2 capitalize text-base flex-grow">
+                    <h3 className="font-medium text-slate-900 dark:text-white mb-4 line-clamp-2 capitalize text-base flex-grow">
                       {product.name.toLowerCase()}
                     </h3>
-                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100">
-                      <span className="text-xs font-medium flex items-center text-slate-500">
+                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
+                      <span className="text-xs font-medium flex items-center text-slate-500 dark:text-slate-400">
                         <span className={`w-1.5 h-1.5 rounded-full mr-2 ${product.inStock ? "bg-emerald-400" : "bg-rose-400"}`}></span>
                         {product.inStock ? "In stock" : "Out of stock"}
                       </span>
                       
-                      <div className="flex items-center text-slate-400 group-hover:text-slate-900 transition-colors">
+                      <div className="flex items-center text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
                         <span className="text-xs font-medium mr-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">View</span>
-                        <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center group-hover:border-slate-900 transition-colors">
+                        <div className="w-8 h-8 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center group-hover:border-slate-900 dark:group-hover:border-white transition-colors">
                           <ArrowRight strokeWidth={1.5} className="w-4 h-4" />
                         </div>
                       </div>
@@ -362,56 +362,45 @@ export default function HomeClient({
 
       {/* 4. Best Sellers (Appliances Only) */}
       {isAppliance && (
-        <section className="py-20 bg-[#FAFAF9] border-t border-stone-200">
+        <section className="py-20 bg-[#FAFAF9] dark:bg-slate-950 border-t border-stone-200 dark:border-slate-800">
           <div className="container mx-auto px-4">
             <div className="flex justify-between items-end mb-12">
               <div>
-                <h2 className="text-4xl md:text-5xl font-serif text-slate-900 mb-3 font-normal flex items-center gap-3">
+                <h2 className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-white mb-3 font-normal flex items-center gap-3">
                   <Flame strokeWidth={1.5} className="w-10 h-10 text-amber-600" /> Best Sellers
                 </h2>
-                <p className="text-slate-500 text-lg font-light tracking-wide">Our most popular choices this month</p>
+                <p className="text-slate-500 dark:text-slate-400 text-lg font-light tracking-wide">Our most popular choices this month</p>
               </div>
-              <Link href={`/${activeStore}`} className="text-slate-500 font-medium hover:text-slate-900 transition-colors hidden sm:flex items-center">
+              <Link href={`/${activeStore}`} className="text-slate-500 dark:text-slate-400 font-medium hover:text-slate-900 dark:hover:text-white transition-colors hidden sm:flex items-center">
                 View all <ArrowRight className="ml-2 w-4 h-4" />
               </Link>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch">
               {bestSellerProducts.slice(0, 4).map((product, i) => (
                 <Link key={product.id + '-bs'} href={`/product/${product.id}`} className="group block relative">
-                  <div className="bg-white rounded-[20px] overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.05),0_12px_32px_rgba(0,0,0,0.06)] transition-all duration-300 flex flex-col h-full border border-black/[0.03] transform group-hover:-translate-y-1">
-                    <div className="w-full aspect-[4/3] h-auto bg-gradient-to-b from-stone-50 to-white relative overflow-hidden flex items-center justify-center p-8">
-                      {/* Glass badge */}
-                      <div className="absolute top-4 left-4 z-10 bg-amber-500/90 backdrop-blur-md text-white text-[10px] font-medium tracking-wider px-3 py-1.5 rounded-full shadow-sm border border-white/20">
-                        {i === 0 ? "#1 in category" : i === 1 ? "Trending" : i === 2 ? "Most gifted" : "Highly rated"}
-                      </div>
-                      
+                  <div className="bg-white dark:bg-slate-900 rounded-[20px] overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.05),0_12px_32px_rgba(0,0,0,0.06)] transition-all duration-300 flex flex-col h-full border border-black/[0.03] dark:border-white/10 transform group-hover:-translate-y-1">
+                    <div className="w-full aspect-[4/3] h-auto bg-white relative overflow-hidden flex items-center justify-center p-8">
                       {product.imageUrls && product.imageUrls.length > 0 ? (
                          <img src={product.imageUrls[0]} alt={product.name} className="object-contain w-full h-full mix-blend-multiply group-hover:scale-[1.03] transition-transform duration-700 ease-out" />
                       ) : (
                          <img src={placeholderImages[(i + 2) % placeholderImages.length]} alt={product.name} className="object-cover w-full h-full group-hover:scale-[1.03] transition-transform duration-700 ease-out" />
                       )}
                     </div>
-                    <div className="p-5 flex flex-col flex-grow border-t border-stone-50">
+                    <div className="p-5 flex flex-col flex-grow border-t border-stone-50 dark:border-slate-800">
                       <div className="flex items-center gap-2 mb-1">
-                        <span className="text-sm font-serif text-slate-300 italic">{i + 1}</span>
                         {product.brand && (
                           <span className="text-[10px] font-medium tracking-widest text-slate-400 uppercase">{product.brand}</span>
                         )}
                       </div>
-                      <h3 className="font-medium text-slate-900 mb-2 line-clamp-2 capitalize text-base">{product.name.toLowerCase()}</h3>
-                      
-                      {/* Rating/Trust signal */}
-                      <div className="text-xs text-slate-500 flex items-center gap-1 mb-4 flex-grow">
-                        <span className="text-amber-500">★</span> 4.{8 - i} <span className="mx-1">·</span> {120 + (i * 45)} reviews
-                      </div>
+                      <h3 className="font-medium text-slate-900 dark:text-white mb-4 line-clamp-2 capitalize text-base flex-grow">{product.name.toLowerCase()}</h3>
 
-                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100">
-                        <span className="text-xs font-medium flex items-center text-slate-500">
+                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
+                        <span className="text-xs font-medium flex items-center text-slate-500 dark:text-slate-400">
                           <span className={`w-1.5 h-1.5 rounded-full mr-2 ${product.inStock ? "bg-emerald-400" : "bg-rose-400"}`}></span>
                           {product.inStock ? "In stock" : "Out of stock"}
                         </span>
                         
-                        <div className="w-8 h-8 rounded-full border border-slate-200 flex items-center justify-center group-hover:border-slate-900 group-hover:bg-slate-900 group-hover:text-white text-slate-400 transition-colors">
+                        <div className="w-8 h-8 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center group-hover:border-slate-900 dark:group-hover:border-white group-hover:bg-slate-900 dark:group-hover:bg-white group-hover:text-white dark:group-hover:text-slate-900 text-slate-400 transition-colors">
                           <ArrowRight strokeWidth={1.5} className="w-4 h-4" />
                         </div>
                       </div>
@@ -425,14 +414,14 @@ export default function HomeClient({
       )}
 
       {/* 5. New Launches (Both Stores) */}
-      <section className="py-16 bg-white border-t">
+      <section className="py-16 bg-white dark:bg-slate-950 border-t dark:border-slate-800">
         <div className="container mx-auto px-4">
           <div className="flex justify-between items-end mb-8">
             <div>
-              <h2 className="text-2xl font-bold tracking-tight flex items-center gap-2">
+              <h2 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white flex items-center gap-2">
                 <span className={isAppliance ? "text-blue-500" : "text-amber-500"}>✨</span> New Launches
               </h2>
-              <p className="text-gray-500 mt-1">
+              <p className="text-gray-500 dark:text-gray-400 mt-1">
                 {isAppliance ? "The latest technology, just arrived" : "The latest designs, just arrived"}
               </p>
             </div>
@@ -443,22 +432,22 @@ export default function HomeClient({
                 <div className={`absolute top-4 left-4 z-10 text-white text-[10px] font-black uppercase tracking-widest px-3 py-1.5 rounded-full shadow-md ${isAppliance ? 'bg-blue-600' : 'bg-amber-600'}`}>
                   New Arrival
                 </div>
-                <div className="bg-white border rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full transform group-hover:-translate-y-1">
-                  <div className={`w-full aspect-[4/3] relative overflow-hidden flex items-center justify-center p-6 ${isAppliance ? 'bg-blue-50/30' : 'bg-amber-50/30'}`}>
+                <div className="bg-white dark:bg-slate-900 border dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col h-full transform group-hover:-translate-y-1">
+                  <div className={`w-full aspect-[4/3] relative overflow-hidden flex items-center justify-center p-6 bg-white`}>
                     {product.imageUrls && product.imageUrls.length > 0 ? (
                        <img src={product.imageUrls[0]} alt={product.name} className="object-contain w-full h-full mix-blend-multiply group-hover:scale-110 transition duration-500" />
                     ) : (
                        <img src={isAppliance ? placeholderImages[(i + 4) % placeholderImages.length] : furnitureImages[(i + 4) % furnitureImages.length]} alt={product.name} className="object-cover w-full h-full group-hover:scale-110 transition duration-500" />
                     )}
                   </div>
-                  <div className="p-5 flex flex-col flex-grow border-t border-gray-50">
+                  <div className="p-5 flex flex-col flex-grow border-t border-gray-50 dark:border-slate-800">
                     <span className="text-xs font-semibold tracking-wider text-gray-400 uppercase mb-1">{product.brand}</span>
-                    <h3 className="font-bold text-gray-900 mb-2 line-clamp-2 flex-grow">{product.name}</h3>
+                    <h3 className="font-bold text-gray-900 dark:text-white mb-2 line-clamp-2 flex-grow">{product.name}</h3>
                     <div className="flex items-center justify-between mt-auto pt-4">
-                      <span className={`px-2 py-1 rounded text-xs font-bold ${product.inStock ? "bg-green-100 text-green-800" : "bg-red-100 text-red-800"}`}>
+                      <span className={`px-2 py-1 rounded text-xs font-bold ${product.inStock ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-400" : "bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-400"}`}>
                         {product.inStock ? "In Stock" : "Out of Stock"}
                       </span>
-                      <div className={`w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center group-hover:text-white transition-colors ${isAppliance ? 'group-hover:bg-blue-600' : 'group-hover:bg-amber-600'}`}>
+                      <div className={`w-8 h-8 rounded-full bg-gray-100 dark:bg-slate-800 flex items-center justify-center group-hover:text-white dark:text-gray-300 transition-colors ${isAppliance ? 'group-hover:bg-blue-600' : 'group-hover:bg-amber-600'}`}>
                         <ArrowRight className="w-4 h-4" />
                       </div>
                     </div>
@@ -472,13 +461,13 @@ export default function HomeClient({
 
       {/* 5. Authorised Seller Brands Grid (Only for Appliances) */}
       {isAppliance && (
-        <section className="bg-slate-50 py-16">
+        <section className="bg-slate-50 dark:bg-slate-950 py-16">
           <div className="container mx-auto px-4">
-            <div className="bg-white rounded-2xl border border-slate-200 p-6 md:p-10 shadow-sm">
+            <div className="bg-white dark:bg-slate-900 rounded-2xl border border-slate-200 dark:border-slate-800 p-6 md:p-10 shadow-sm">
               
               {/* Section Header */}
               <div className="flex items-center justify-center sm:justify-start mb-10">
-                <h2 className="text-xl md:text-2xl font-black text-slate-900 tracking-tight uppercase">
+                <h2 className="text-xl md:text-2xl font-black text-slate-900 dark:text-white tracking-tight uppercase">
                   Authorised Seller of Leading Brands
                 </h2>
               </div>
@@ -489,16 +478,20 @@ export default function HomeClient({
                   brandLogos.filter(b => b.store === "Appliances").map((brand) => {
                     const sizeClass = 
                       brand.size === 'small' ? 'h-6 md:h-8' :
-                      brand.size === 'large' ? 'h-10 md:h-14' :
-                      brand.size === 'xlarge' ? 'h-14 md:h-18' :
-                      'h-8 md:h-11'; // medium is default
+                      brand.size === 'large' ? 'h-10 md:h-16' :
+                      brand.size === 'xlarge' ? 'h-12 md:h-20' :
+                      brand.size === '2xlarge' ? 'h-14 md:h-24' :
+                      brand.size === '3xlarge' ? 'h-16 md:h-28' :
+                      brand.size === '4xlarge' ? 'h-20 md:h-32' :
+                      'h-8 md:h-12'; // medium is default
+                    const invertClass = brand.invertInDark ? "dark:brightness-0 dark:invert" : "dark:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]";
                       
                     return (
-                      <div key={brand.id} className="flex items-center justify-center h-12 md:h-16 w-full">
+                      <div key={brand.id} className="group flex items-center justify-center min-h-[4rem] md:min-h-[6rem] w-full transition-all duration-300">
                         <img 
                           src={brand.url} 
                           alt={`${brand.name} logo`}
-                          className={`${sizeClass} w-auto max-w-[100px] md:max-w-[140px] object-contain transition-transform hover:scale-105 duration-300`}
+                          className={`${sizeClass} w-auto max-w-full object-contain transition-all group-hover:scale-110 duration-500 mix-blend-multiply dark:mix-blend-normal ${invertClass} opacity-90 group-hover:opacity-100`}
                         />
                       </div>
                     )
@@ -508,25 +501,28 @@ export default function HomeClient({
                   [
                     { name: "Samsung", src: "https://commons.wikimedia.org/wiki/Special:FilePath/Samsung_Logo.svg", sizeClass: "h-9 md:h-12" },
                     { name: "LG", src: "https://commons.wikimedia.org/wiki/Special:FilePath/LG_logo_(2015).svg", sizeClass: "h-9 md:h-12" },
-                    { name: "Whirlpool", src: "https://commons.wikimedia.org/wiki/Special:FilePath/Whirlpool_Corporation_Logo_(as_of_2017).svg", sizeClass: "h-10 md:h-14" },
+                    { name: "Whirlpool", src: "https://commons.wikimedia.org/wiki/Special:FilePath/Whirlpool_Corporation_Logo_(as_of_2017).svg", sizeClass: "h-14 md:h-20" },
                     { name: "Bosch", src: "https://cdn.worldvectorlogo.com/logos/bosch.svg", sizeClass: "h-10 md:h-14" },
                     { name: "Voltas", src: "https://commons.wikimedia.org/wiki/Special:FilePath/Voltas_logo.svg", sizeClass: "h-9 md:h-12" },
                     { name: "Haier", src: "https://cdn.worldvectorlogo.com/logos/haier.svg", sizeClass: "h-16 md:h-20 scale-125" },
-                    { name: "Apple", src: "https://commons.wikimedia.org/wiki/Special:FilePath/Apple_logo_black.svg", sizeClass: "h-9 md:h-12" },
+                    { name: "Apple", src: "https://commons.wikimedia.org/wiki/Special:FilePath/Apple_logo_black.svg", sizeClass: "h-9 md:h-12", invertInDark: true },
                     { name: "Dell", src: "https://commons.wikimedia.org/wiki/Special:FilePath/Dell_logo_2016.svg", sizeClass: "h-9 md:h-12" },
-                    { name: "ASUS", src: "https://commons.wikimedia.org/wiki/Special:FilePath/ASUS_Logo.svg", sizeClass: "h-8 md:h-10" },
-                    { name: "Sony", src: "https://commons.wikimedia.org/wiki/Special:FilePath/Sony_logo.svg", sizeClass: "h-8 md:h-10" },
+                    { name: "ASUS", src: "https://commons.wikimedia.org/wiki/Special:FilePath/ASUS_Logo.svg", sizeClass: "h-8 md:h-10", invertInDark: true },
+                    { name: "Sony", src: "https://commons.wikimedia.org/wiki/Special:FilePath/Sony_logo.svg", sizeClass: "h-8 md:h-10", invertInDark: true },
                     { name: "Philips", src: "https://commons.wikimedia.org/wiki/Special:FilePath/Philips_logo_new.svg", sizeClass: "h-9 md:h-12" },
-                    { name: "Panasonic", src: "https://commons.wikimedia.org/wiki/Special:FilePath/Panasonic_logo.svg", sizeClass: "h-7 md:h-9" }
-                  ].map((brand) => (
-                    <div key={brand.name} className="flex items-center justify-center h-12 md:h-16 w-full">
-                      <img 
-                        src={brand.src} 
-                        alt={`${brand.name} logo`}
-                        className={`${brand.sizeClass || 'h-7 md:h-8'} w-auto max-w-[100px] md:max-w-[140px] object-contain transition-transform hover:scale-105 duration-300`}
-                      />
-                    </div>
-                  ))
+                    { name: "Panasonic", src: "https://commons.wikimedia.org/wiki/Special:FilePath/Panasonic_logo.svg", sizeClass: "h-7 md:h-9", invertInDark: true }
+                  ].map((brand) => {
+                    const invertClass = brand.invertInDark ? "dark:brightness-0 dark:invert" : "dark:drop-shadow-[0_0_8px_rgba(255,255,255,0.3)]";
+                    return (
+                      <div key={brand.name} className="group flex items-center justify-center min-h-[4rem] md:min-h-[6rem] w-full transition-all duration-300">
+                        <img 
+                          src={brand.src} 
+                          alt={`${brand.name} logo`}
+                          className={`${brand.sizeClass || 'h-8 md:h-12'} w-auto max-w-full object-contain transition-all group-hover:scale-110 duration-500 mix-blend-multiply dark:mix-blend-normal ${invertClass} opacity-90 group-hover:opacity-100`}
+                        />
+                      </div>
+                    )
+                  })
                 )}
               </div>
 
@@ -559,10 +555,8 @@ export default function HomeClient({
                 </Link>
               </div>
             </div>
-            <div className="md:w-1/2 w-full aspect-video bg-white/5 border border-white/10 rounded-3xl overflow-hidden relative group">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <img src="/images/1.avif" alt="Samsung Showcase" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-              </div>
+            <div className="md:w-1/2 w-full bg-white/5 border border-white/10 rounded-3xl overflow-hidden relative group">
+              <img src="/images/samsung.jpg" alt="Samsung Showcase" className="w-full h-auto object-cover group-hover:scale-105 transition-transform duration-700" />
             </div>
           </div>
         </section>
@@ -570,53 +564,53 @@ export default function HomeClient({
 
       {/* Custom Furniture Banner (Furniture Only) */}
       {!isAppliance && (
-        <section className="py-20 bg-[#FAFAF9] border-t border-b border-slate-200">
+        <section className="py-20 bg-[#FAFAF9] dark:bg-slate-950 border-t border-b border-slate-200 dark:border-slate-800">
           <div className="container mx-auto px-4 relative z-10 flex flex-col md:flex-row items-center justify-between gap-12">
             <div className="md:w-1/2 space-y-6">
-              <div className="inline-flex items-center bg-amber-100/60 border border-amber-200/60 text-amber-900 text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full shadow-sm">
+              <div className="inline-flex items-center bg-amber-100/60 dark:bg-amber-900/30 border border-amber-200/60 dark:border-amber-800/50 text-amber-900 dark:text-amber-400 text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full shadow-sm">
                 Bespoke Services
               </div>
-              <h2 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 tracking-tight" style={{ fontFamily: 'var(--font-cormorant)' }}>
+              <h2 className="text-4xl md:text-5xl font-serif font-bold text-slate-900 dark:text-slate-100 tracking-tight" style={{ fontFamily: 'var(--font-cormorant)' }}>
                 Customize Your Furniture
               </h2>
-              <p className="text-lg text-slate-600 max-w-lg leading-relaxed font-light">
+              <p className="text-lg text-slate-600 dark:text-slate-400 max-w-lg leading-relaxed font-light">
                 Can't find the perfect fit? We craft bespoke pieces tailored exactly to your space. Choose your own dimensions, fabrics, and finishes to create something uniquely yours.
               </p>
               <ul className="space-y-4 py-4">
-                <li className="flex items-start text-slate-700">
-                  <div className="p-2 bg-white rounded-lg mr-4 mt-0.5 border border-slate-200 shadow-sm">
-                    <Ruler className="w-5 h-5 text-slate-800" />
+                <li className="flex items-start text-slate-700 dark:text-slate-300">
+                  <div className="p-2 bg-white dark:bg-slate-900 rounded-lg mr-4 mt-0.5 border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <Ruler className="w-5 h-5 text-slate-800 dark:text-slate-200" />
                   </div>
                   <div>
-                    <span className="block font-semibold text-slate-900 mb-0.5">Custom Dimensions</span>
-                    <span className="text-sm text-slate-500">Tailored to fit your floorplan perfectly</span>
+                    <span className="block font-semibold text-slate-900 dark:text-slate-100 mb-0.5">Custom Dimensions</span>
+                    <span className="text-sm text-slate-500 dark:text-slate-400">Tailored to fit your floorplan perfectly</span>
                   </div>
                 </li>
-                <li className="flex items-start text-slate-700">
-                  <div className="p-2 bg-white rounded-lg mr-4 mt-0.5 border border-slate-200 shadow-sm">
-                    <Palette className="w-5 h-5 text-slate-800" />
+                <li className="flex items-start text-slate-700 dark:text-slate-300">
+                  <div className="p-2 bg-white dark:bg-slate-900 rounded-lg mr-4 mt-0.5 border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <Palette className="w-5 h-5 text-slate-800 dark:text-slate-200" />
                   </div>
                   <div>
-                    <span className="block font-semibold text-slate-900 mb-0.5">Premium Materials</span>
-                    <span className="text-sm text-slate-500">Extensive fabric & genuine leather options</span>
+                    <span className="block font-semibold text-slate-900 dark:text-slate-100 mb-0.5">Premium Materials</span>
+                    <span className="text-sm text-slate-500 dark:text-slate-400">Extensive fabric & genuine leather options</span>
                   </div>
                 </li>
-                <li className="flex items-start text-slate-700">
-                  <div className="p-2 bg-white rounded-lg mr-4 mt-0.5 border border-slate-200 shadow-sm">
-                    <Hammer className="w-5 h-5 text-slate-800" />
+                <li className="flex items-start text-slate-700 dark:text-slate-300">
+                  <div className="p-2 bg-white dark:bg-slate-900 rounded-lg mr-4 mt-0.5 border border-slate-200 dark:border-slate-800 shadow-sm">
+                    <Hammer className="w-5 h-5 text-slate-800 dark:text-slate-200" />
                   </div>
                   <div>
-                    <span className="block font-semibold text-slate-900 mb-0.5">Choice of Finishes</span>
-                    <span className="text-sm text-slate-500">Select your preferred wood grains & leg styles</span>
+                    <span className="block font-semibold text-slate-900 dark:text-slate-100 mb-0.5">Choice of Finishes</span>
+                    <span className="text-sm text-slate-500 dark:text-slate-400">Select your preferred wood grains & leg styles</span>
                   </div>
                 </li>
               </ul>
               
-              <div className="flex items-center gap-3 text-sm text-slate-700 font-medium tracking-wide my-2 bg-white px-5 py-3 rounded-xl border border-slate-200 shadow-sm w-fit">
+              <div className="flex items-center gap-3 text-sm text-slate-700 dark:text-slate-300 font-medium tracking-wide my-2 bg-white dark:bg-slate-900 px-5 py-3 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm w-fit">
                 <span>1. Share ideas</span>
-                <ArrowRight className="w-3.5 h-3.5 text-amber-600" />
+                <ArrowRight className="w-3.5 h-3.5 text-amber-600 dark:text-amber-500" />
                 <span>2. Get quote</span>
-                <ArrowRight className="w-3.5 h-3.5 text-amber-600" />
+                <ArrowRight className="w-3.5 h-3.5 text-amber-600 dark:text-amber-500" />
                 <span>3. We craft it</span>
               </div>
 
@@ -638,11 +632,11 @@ export default function HomeClient({
                     </svg>
                     Request Custom Quote
                   </a>
-                  <button className="text-slate-600 hover:text-slate-900 text-sm font-semibold underline underline-offset-4 transition-colors">
+                  <button className="text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 text-sm font-semibold underline underline-offset-4 transition-colors">
                     View past custom work
                   </button>
                 </div>
-                <p className="text-sm text-slate-500 mt-4">Free consultation, no obligation.</p>
+                <p className="text-sm text-slate-500 dark:text-slate-500 mt-4">Free consultation, no obligation.</p>
               </div>
             </div>
             <div className="md:w-1/2 w-full flex justify-end mt-8 md:mt-0">
@@ -662,13 +656,13 @@ export default function HomeClient({
       )}
 
       {/* Why Shop With Us / Store Info (Shared) */}
-      <section className="py-20 bg-gray-50 border-t">
+      <section className="py-20 bg-gray-50 dark:bg-slate-950 border-t dark:border-slate-800">
         <div className="container mx-auto px-4">
           <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
             <div className="lg:w-1/2 space-y-6">
-              <h2 className="text-3xl font-bold tracking-tight">Why Shop With Us?</h2>
+              <h2 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">Why Shop With Us?</h2>
               <div className={`w-20 h-1 rounded ${isAppliance ? 'bg-blue-600' : 'bg-amber-600'}`}></div>
-              <p className="text-lg text-gray-600 leading-relaxed">
+              <p className="text-lg text-gray-600 dark:text-gray-400 leading-relaxed">
                 For years, Sri Sai Home Appliances has been a trusted name for families across our city looking for quality home appliances and furniture under one roof. We work directly with leading brands to bring you genuine products backed by official warranty, and our team is always on hand to help you choose the right fit for your home and budget.
               </p>
               <p className="text-lg text-gray-600 leading-relaxed">
@@ -688,9 +682,9 @@ export default function HomeClient({
 
       {/* 7. By the Numbers (Appliances Only) */}
       {isAppliance && (
-        <section className="py-16 bg-white border-t">
+        <section className="py-16 bg-white dark:bg-slate-950 border-t dark:border-slate-800">
           <div className="container mx-auto px-4">
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-gray-100">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 divide-x divide-gray-100 dark:divide-slate-800">
               {[
                 { number: "15+", label: "Years in Business" },
                 { number: "50k+", label: "Happy Families" },
@@ -709,7 +703,7 @@ export default function HomeClient({
 
       {/* 8. Furniture Spotlight (Appliances Only - Cross Promotion) */}
       {isAppliance && (
-        <section className="py-16 md:py-24 bg-gray-50 border-t">
+        <section className="py-16 md:py-24 bg-gray-50 dark:bg-slate-950 border-t dark:border-slate-800">
           <div className="container mx-auto px-4 md:px-8">
             <div className="bg-gradient-to-br from-stone-950 via-[#4A2612] to-amber-700 rounded-2xl shadow-2xl flex flex-col md:flex-row relative overflow-hidden">
               
@@ -756,7 +750,7 @@ export default function HomeClient({
 
       {/* Appliances Spotlight (Furniture Only - Cross Promotion) */}
       {!isAppliance && (
-        <section className="py-16 md:py-24 bg-gray-50 border-t">
+        <section className="py-16 md:py-24 bg-gray-50 dark:bg-slate-950 border-t dark:border-slate-800">
           <div className="container mx-auto px-4 md:px-8">
             <div className="bg-gradient-to-br from-slate-950 via-[#1E3A8A] to-blue-700 rounded-2xl shadow-2xl flex flex-col md:flex-row relative overflow-hidden">
               
@@ -801,57 +795,16 @@ export default function HomeClient({
         </section>
       )}
 
-      {/* Testimonials (Shared) */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl font-bold tracking-tight">Trusted by Customers</h2>
-            <p className="text-gray-500 mt-2">Don't just take our word for it.</p>
-          </div>
-          
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            {[
-              {
-                quote: "Bought a refrigerator here last month — the staff helped me compare models without any pressure to buy the most expensive one. Genuinely helpful.",
-                name: "Placeholder, Customer Name"
-              },
-              {
-                quote: "Good collection of furniture, and they were patient while we took our time deciding on a sofa set. Delivery was quick too.",
-                name: "Placeholder, Customer Name"
-              },
-              {
-                quote: "Have been buying appliances from this store for years. Reliable, and they stand by their warranty support.",
-                name: "Placeholder, Customer Name"
-              }
-            ].map((testimonial, idx) => (
-              <div key={idx} className="bg-gray-50 p-8 rounded-2xl border relative hover:shadow-md transition">
-                <div className={`mb-4 flex ${isAppliance ? 'text-blue-500' : 'text-amber-500'}`}>
-                  {[1,2,3,4,5].map(star => <Star key={star} className="w-5 h-5 fill-current" />)}
-                </div>
-                <p className="text-gray-700 mb-6 italic">"{testimonial.quote}"</p>
-                <div className="flex items-center">
-                  <div className="w-10 h-10 bg-gray-200 rounded-full mr-3 flex items-center justify-center font-bold text-gray-400">
-                    {testimonial.name[0]}
-                  </div>
-                  <div>
-                    <h4 className="font-semibold text-sm">{testimonial.name}</h4>
-                    <span className="text-xs text-gray-500">Verified Customer</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+
 
 
       {/* 10. FAQ Accordion (Appliances Only) */}
       {isAppliance && (
-        <section className="py-20 bg-gray-50 border-t">
+        <section className="py-20 bg-gray-50 dark:bg-slate-950 border-t dark:border-slate-800">
           <div className="container mx-auto px-4 max-w-3xl">
             <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold tracking-tight text-gray-900">Frequently Asked Questions</h2>
-              <p className="text-gray-500 mt-2">Everything you need to know about buying from us.</p>
+              <h2 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Frequently Asked Questions</h2>
+              <p className="text-gray-500 dark:text-gray-400 mt-2">Everything you need to know about buying from us.</p>
             </div>
             <div className="space-y-4">
               {[
@@ -861,14 +814,14 @@ export default function HomeClient({
                 { q: "Is installation free?", a: "Standard installation is completely free for major appliances like ACs, Washing Machines, and TVs, provided by the brand's authorized technicians." },
                 { q: "What is your return policy?", a: "We accept returns or replacements within 7 days of delivery only in the case of manufacturing defects or transit damage. Please inspect your product upon delivery." }
               ].map((faq, i) => (
-                <details key={i} className="group bg-white border border-gray-200 rounded-2xl open:shadow-md transition-all duration-300">
-                  <summary className="flex items-center justify-between cursor-pointer p-6 font-bold text-gray-900 marker:content-none">
+                <details key={i} className="group bg-white dark:bg-slate-900 border border-gray-200 dark:border-slate-800 rounded-2xl open:shadow-md transition-all duration-300">
+                  <summary className="flex items-center justify-between cursor-pointer p-6 font-bold text-gray-900 dark:text-white marker:content-none">
                     {faq.q}
                     <span className="transition group-open:rotate-180">
                       <svg fill="none" height="24" shapeRendering="geometricPrecision" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" viewBox="0 0 24 24" width="24"><path d="M6 9l6 6 6-6"></path></svg>
                     </span>
                   </summary>
-                  <div className="px-6 pb-6 text-gray-600 leading-relaxed border-t border-gray-100 pt-4 mt-2">
+                  <div className="px-6 pb-6 text-gray-600 dark:text-gray-400 leading-relaxed border-t border-gray-100 dark:border-slate-800 pt-4 mt-2">
                     {faq.a}
                   </div>
                 </details>

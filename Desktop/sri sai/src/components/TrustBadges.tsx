@@ -35,13 +35,13 @@ export function TrustBadges({ specs }: { specs?: SpecData }) {
   ]
 
   return (
-    <div className="flex flex-wrap justify-start items-start gap-8 mb-8 pb-8 border-b border-gray-100">
+    <div className="flex flex-wrap justify-start items-start gap-8 mb-8 pb-8 border-b border-gray-100 dark:border-slate-800">
       {badges.map((badge, idx) => (
         <div key={idx} className="flex flex-col items-center text-center max-w-[80px]">
-          <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-1">
+          <div className="w-12 h-12 rounded-full bg-blue-50 dark:bg-blue-900/20 flex items-center justify-center mb-1">
             {badge.icon}
           </div>
-          <span className="text-xs font-medium text-gray-700 leading-tight">
+          <span className="text-xs font-medium text-gray-700 dark:text-gray-300 leading-tight">
             {badge.label}
           </span>
         </div>

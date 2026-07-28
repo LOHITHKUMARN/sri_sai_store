@@ -127,6 +127,16 @@
   html {
     @apply font-sans;
   }
+  
+}
+
+/* Globally hide scrollbars while still allowing scrolling (fixes thick desktop scrollbars) */
+::-webkit-scrollbar {
+  display: none;
+}
+html, body {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
 
 @layer utilities {

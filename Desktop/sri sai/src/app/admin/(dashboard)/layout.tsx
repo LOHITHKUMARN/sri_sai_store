@@ -24,7 +24,7 @@ export default async function AdminLayout({ children }: { children: ReactNode })
   // Middleware handles auth protection, so we don't need a manual redirect here.
 
   return (
-    <div className="flex min-h-screen w-full bg-gray-100">
+    <div className="flex min-h-screen w-full bg-gray-100 text-gray-900">
       {/* Sidebar */}
       <aside className="w-64 bg-white border-r border-gray-200 hidden md:block">
         <div className="h-full flex flex-col">

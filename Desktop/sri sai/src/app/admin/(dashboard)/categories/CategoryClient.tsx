@@ -14,8 +14,8 @@ type Store = { id: string, name: string }
 type Category = {
   id: string
   name: string
-  storeId: string
-  store: Store
+  storeId: string | null
+  store: Store | null
   _count: { products: number }
 }
 

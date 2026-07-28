@@ -1,5 +1,5 @@
 import { useRouter, useSearchParams, usePathname } from "next/navigation"
-import { Search, Filter, X } from "lucide-react"
+import { Search, Filter, X, RotateCcw } from "lucide-react"
 import { useState } from "react"
 
 export function FurnitureFilterSidebar({
@@ -7,13 +7,17 @@ export function FurnitureFilterSidebar({
   setSearchQuery,
   categories,
   selectedCategory,
-  handleCategorySelect
+  handleCategorySelect,
+  handleClearAllFilters,
+  hasActiveFilters
 }: {
   searchQuery: string
   setSearchQuery: (val: string) => void
   categories: { id: string, name: string }[]
   selectedCategory: string | null
   handleCategorySelect: (id: string | null) => void
+  handleClearAllFilters?: () => void
+  hasActiveFilters?: boolean
 }) {
   const searchParams = useSearchParams()
   const router = useRouter()
@@ -32,12 +36,25 @@ export function FurnitureFilterSidebar({
 
   return (
     <div className="space-y-8">
+      {hasActiveFilters && handleClearAllFilters && (
+        <div className="pb-3 border-b dark:border-slate-800 flex justify-between items-center">
+          <span className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">Filters Applied</span>
+          <button
+            onClick={handleClearAllFilters}
+            className="text-xs font-bold text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 hover:underline flex items-center gap-1"
+          >
+            <RotateCcw className="w-3.5 h-3.5" />
+            Clear All
+          </button>
+        </div>
+      )}
+
       <div>
-        <h3 className="font-semibold mb-4 flex items-center"><Search className="w-4 h-4 mr-2" /> Search</h3>
+        <h3 className="font-semibold mb-4 flex items-center dark:text-slate-100"><Search className="w-4 h-4 mr-2" /> Search</h3>
         <input 
           type="text" 
           placeholder="Search products..." 
-          className="w-full border rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
+          className="w-full border dark:border-slate-700 bg-white dark:bg-slate-900 dark:text-slate-100 rounded-md px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500 outline-none"
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />

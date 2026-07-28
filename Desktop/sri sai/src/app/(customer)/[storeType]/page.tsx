@@ -12,8 +12,10 @@ export default async function ListingPage(
   const resolvedParams = await props.params
   const resolvedSearchParams = await props.searchParams
   const storeType = resolvedParams.storeType.toLowerCase()
+  console.log("ListingPage rendered with storeType:", storeType, "resolvedParams:", resolvedParams)
 
   if (storeType !== "appliances" && storeType !== "furniture") {
+    console.log("Calling notFound() because storeType is invalid")
     notFound()
   }
 
@@ -63,7 +65,12 @@ export default async function ListingPage(
       imageUrls: true,
       brand: true,
       price: true,
-      categoryId: true
+      categoryId: true,
+      isFeatured: true,
+      isBestSeller: true,
+      specs: true,
+      description: true,
+      legacyDescription: true
     }
   })
 

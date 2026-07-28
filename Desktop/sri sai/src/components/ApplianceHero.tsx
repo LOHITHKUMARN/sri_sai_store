@@ -51,6 +51,7 @@ export default function ApplianceHero({
             }`} 
           />
         ))}
+        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent z-10" />
       </div>
       <div className="container mx-auto flex flex-col md:flex-row items-center justify-between relative z-10">
         <div className="md:w-1/2 space-y-6">

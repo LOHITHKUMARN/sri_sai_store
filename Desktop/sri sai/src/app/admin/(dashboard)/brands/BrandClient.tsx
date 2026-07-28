@@ -5,7 +5,7 @@ import { useRouter, useSearchParams } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { UploadCloud, Trash2, ArrowUp, ArrowDown, Loader2, ImageIcon, Check } from "lucide-react"
-import { uploadBrandLogo, deleteBrandLogo, reorderBrandLogos, updateBrandLogoSize } from "./actions"
+import { uploadBrandLogo, deleteBrandLogo, reorderBrandLogos, updateBrandLogoSize, updateBrandLogoInvert } from "./actions"
 import { BrandLogo } from "@prisma/client"
 
 export default function BrandClient({ initialLogos }: { initialLogos: BrandLogo[] }) {
@@ -109,6 +109,22 @@ export default function BrandClient({ initialLogos }: { initialLogos: BrandLogo[
     setUpdatingId(null)
   }
 
+  const handleInvertChange = async (id: string, invertInDark: boolean) => {
+    setUpdatingId(id)
+    try {
+      await updateBrandLogoInvert(id, invertInDark)
+      const newGlobalLogos = logos.map(l => l.id === id ? { ...l, invertInDark } : l)
+      setLogos(newGlobalLogos)
+      setSuccessId(id)
+      setTimeout(() => setSuccessId(null), 2000)
+      router.refresh()
+    } catch (error) {
+      console.error(error)
+      alert("Failed to update invert setting")
+    }
+    setUpdatingId(null)
+  }
+
   // Update state when server sends new initialLogos props
   useMemo(() => {
     setLogos(initialLogos)
@@ -199,7 +215,7 @@ export default function BrandClient({ initialLogos }: { initialLogos: BrandLogo[
                     <div className="text-sm font-medium">{logo.name}</div>
                     <div className="text-xs text-gray-500 truncate">{logo.url}</div>
                   </div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
                     <div className="relative">
                       <select
                         value={logo.size}
@@ -211,6 +227,9 @@ export default function BrandClient({ initialLogos }: { initialLogos: BrandLogo[
                         <option value="medium">Medium</option>
                         <option value="large">Large</option>
                         <option value="xlarge">Extra Large</option>
+                        <option value="2xlarge">2X Large</option>
+                        <option value="3xlarge">3X Large</option>
+                        <option value="4xlarge">Huge</option>
                       </select>
                       {updatingId === logo.id ? (
                         <Loader2 className="absolute right-1.5 top-2 h-3 w-3 animate-spin text-gray-400" />
@@ -220,6 +239,17 @@ export default function BrandClient({ initialLogos }: { initialLogos: BrandLogo[
                         <div className="absolute right-1.5 top-2.5 w-2 h-2 border-b border-r border-gray-400 transform rotate-45 pointer-events-none" />
                       )}
                     </div>
+                    
+                    <label className="flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer ml-2">
+                      <input 
+                        type="checkbox" 
+                        checked={logo.invertInDark} 
+                        onChange={(e) => handleInvertChange(logo.id, e.target.checked)}
+                        disabled={updatingId === logo.id}
+                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+                      />
+                      <span className="whitespace-nowrap">Invert in Dark</span>
+                    </label>
                   </div>
                   <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
                     <div className="flex flex-col gap-1">
