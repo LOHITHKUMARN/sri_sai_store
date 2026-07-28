@@ -375,28 +375,28 @@ export default function HomeClient({
                 View all <ArrowRight className="ml-2 w-4 h-4" />
               </Link>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
+            <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6 items-stretch">
               {bestSellerProducts.slice(0, 4).map((product, i) => (
                 <Link key={product.id + '-bs'} href={`/product/${product.id}`} className="group block relative">
                   <div className="bg-white dark:bg-slate-950 border dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition flex flex-col h-full">
-                    <div className="w-full aspect-square bg-white relative overflow-hidden flex items-center justify-center p-6 border-b dark:border-slate-800">
+                    <div className="w-full aspect-[4/3] sm:aspect-square bg-white relative overflow-hidden flex items-center justify-center p-3 sm:p-6 border-b dark:border-slate-800">
                       {product.imageUrls && product.imageUrls.length > 0 ? (
                          <img src={product.imageUrls[0]} alt={product.name} className="object-contain w-full h-full mix-blend-multiply group-hover:scale-105 transition duration-300" />
                       ) : (
                          <span className="text-gray-400 font-medium text-xs sm:text-sm">No Image</span>
                       )}
                     </div>
-                    <div className="p-5 flex flex-col flex-grow">
+                    <div className="p-3 sm:p-5 flex flex-col flex-grow">
                       {product.brand && (
-                        <span className="text-[10px] font-semibold tracking-wider text-gray-400 dark:text-gray-500 uppercase mb-1">{product.brand}</span>
+                        <span className="text-[9px] sm:text-[10px] font-semibold tracking-wider text-gray-400 dark:text-gray-500 uppercase mb-1">{product.brand}</span>
                       )}
-                      <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-4 line-clamp-2 uppercase text-sm sm:text-base flex-grow">{product.name}</h3>
+                      <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-3 line-clamp-2 uppercase text-xs sm:text-base flex-grow">{product.name}</h3>
 
-                      <div className="flex items-center justify-between mt-auto pt-4 border-t dark:border-slate-800">
-                        <span className={`px-2.5 py-1 rounded text-xs font-bold ${product.inStock ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"}`}>
+                      <div className="flex items-center justify-between mt-auto pt-3 border-t dark:border-slate-800">
+                        <span className={`px-2 py-0.5 sm:px-2.5 sm:py-1 rounded text-[10px] sm:text-xs font-bold ${product.inStock ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"}`}>
                           {product.inStock ? "In Stock" : "Out of Stock"}
                         </span>
-                        <span className="bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-3 py-1 rounded-full text-xs font-medium">
+                        <span className="bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-2.5 sm:px-3.5 py-0.5 sm:py-1 rounded-full text-[10px] sm:text-xs font-medium">
                           View
                         </span>
                       </div>
