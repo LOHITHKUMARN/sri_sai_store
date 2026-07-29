@@ -9,6 +9,7 @@ import { ThemeToggle } from "@/components/ThemeToggle"
 import { usePathname, useRouter } from "next/navigation"
 import { useState, useEffect } from "react"
 import { SearchAutocomplete } from "@/components/SearchAutocomplete"
+import SplashScreen from "@/components/SplashScreen"
 
 function Header() {
   const { activeStore, setActiveStore } = useStore()
@@ -515,6 +516,8 @@ import { AIChatFloatingButton } from "@/components/AIChatFloatingButton"
 export default function CustomerLayout({ children }: { children: ReactNode }) {
   return (
     <StoreProvider>
+      {/* Splash screen — overlays everything on first session visit, then unmounts */}
+      <SplashScreen />
       <Tracker />
       <div className="min-h-screen flex flex-col bg-gray-50 dark:bg-gray-950 relative">
         <Header />

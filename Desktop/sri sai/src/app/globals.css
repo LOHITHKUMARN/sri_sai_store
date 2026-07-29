@@ -148,3 +148,59 @@ html, body {
     scrollbar-width: none;
   }
 }
+
+/* ============================================================
+   SPLASH SCREEN ANIMATIONS
+   ============================================================ */
+
+@keyframes splash-logo-in {
+  0%   { opacity: 0; transform: scale(0.72) translateY(8px); }
+  60%  { opacity: 1; transform: scale(1.04) translateY(0); }
+  100% { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+@keyframes splash-text-in {
+  0%   { opacity: 0; transform: translateY(14px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes splash-line-in {
+  0%   { width: 0; opacity: 0; }
+  100% { width: 4rem; opacity: 1; }
+}
+
+@keyframes splash-overlay-out {
+  0%   { opacity: 1; }
+  100% { opacity: 0; pointer-events: none; }
+}
+
+.splash-logo-animate {
+  animation: splash-logo-in 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+
+.splash-title-animate {
+  animation: splash-text-in 0.55s ease-out 0.7s both;
+}
+
+.splash-line-animate {
+  animation: splash-line-in 0.45s ease-out 1.0s both;
+}
+
+.splash-subtitle-animate {
+  animation: splash-text-in 0.5s ease-out 1.15s both;
+}
+
+.splash-exit {
+  animation: splash-overlay-out 0.55s ease-in-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .splash-logo-animate,
+  .splash-title-animate,
+  .splash-line-animate,
+  .splash-subtitle-animate {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
