@@ -247,29 +247,29 @@ export function BulkUploadModal({
               </div>
 
               {preview.length > 0 && (
-                <div className="border rounded-lg overflow-hidden flex flex-col max-h-96">
-                  <div className="bg-slate-100 p-3 border-b flex justify-between items-center text-sm font-semibold sticky top-0">
-                    <span>Preview ({preview.length} rows processed)</span>
+                <div className="border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden flex flex-col max-h-96">
+                  <div className="bg-slate-100 dark:bg-slate-800 p-3 border-b border-slate-200 dark:border-slate-700 flex justify-between items-start sm:items-center text-sm font-semibold sticky top-0">
+                    <span className="text-slate-900 dark:text-slate-100">Preview ({preview.length} rows processed)</span>
                     <div className="flex space-x-4 text-xs">
-                      <span className="text-green-600 font-bold">{preview.filter(p => p.status === 'MATCHED').length} Matched</span>
-                      <span className="text-blue-600 font-bold">{preview.filter(p => p.status === 'NEW').length} New</span>
-                      <span className="text-gray-500 font-bold">{preview.filter(p => p.status === 'SKIPPED').length} Skipped</span>
+                      <span className="text-green-600 dark:text-green-400 font-bold">{preview.filter(p => p.status === 'MATCHED').length} Matched</span>
+                      <span className="text-blue-600 dark:text-blue-400 font-bold">{preview.filter(p => p.status === 'NEW').length} New</span>
+                      <span className="text-slate-500 dark:text-slate-400 font-bold">{preview.filter(p => p.status === 'SKIPPED').length} Skipped</span>
                     </div>
                   </div>
                   <div className="overflow-y-auto">
                     <table className="w-full text-sm text-left">
-                      <thead className="bg-white sticky top-0 shadow-sm z-10">
+                      <thead className="bg-white dark:bg-slate-900 sticky top-0 shadow-2xs z-10 border-b border-slate-200 dark:border-slate-800">
                         <tr>
-                          <th className="px-4 py-2 text-slate-500 font-medium w-12">Status</th>
-                          <th className="px-4 py-2 text-slate-500 font-medium">Item Name</th>
-                          <th className="px-4 py-2 text-slate-500 font-medium">Auto-Categorization</th>
-                          <th className="px-4 py-2 text-slate-500 font-medium w-24">Qty</th>
-                          <th className="px-4 py-2 text-slate-500 font-medium">Details</th>
+                          <th className="px-4 py-2 text-slate-500 dark:text-slate-400 font-medium w-12">Status</th>
+                          <th className="px-4 py-2 text-slate-500 dark:text-slate-400 font-medium">Item Name</th>
+                          <th className="px-4 py-2 text-slate-500 dark:text-slate-400 font-medium">Auto-Categorization</th>
+                          <th className="px-4 py-2 text-slate-500 dark:text-slate-400 font-medium w-24">Qty</th>
+                          <th className="px-4 py-2 text-slate-500 dark:text-slate-400 font-medium">Details</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y">
+                      <tbody className="divide-y divide-slate-100 dark:divide-slate-800">
                         {preview.map((row, i) => (
-                          <tr key={i} className={row.status === 'SKIPPED' ? 'bg-slate-50 text-slate-400' : ''}>
+                          <tr key={i} className={row.status === 'SKIPPED' ? 'bg-slate-50 dark:bg-slate-950/40 text-slate-400 dark:text-slate-500' : 'hover:bg-slate-50/50 dark:hover:bg-slate-800/40'}>
                             <td className="px-4 py-2">
                               {row.status === 'MATCHED' && <CheckCircle className="w-5 h-5 text-green-500" />}
                               {row.status === 'NEW' && <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded text-xs font-bold">NEW</span>}

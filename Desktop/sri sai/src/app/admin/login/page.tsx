@@ -41,11 +41,11 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex h-screen w-full items-center justify-center bg-gray-50">
-      <Card className="w-full max-w-md">
+    <div className="flex h-screen w-full items-center justify-center bg-slate-50 dark:bg-slate-950">
+      <Card className="w-full max-w-md bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 shadow-2xs">
         <CardHeader className="space-y-1">
-          <CardTitle className="text-2xl font-bold">Admin Login</CardTitle>
-          <CardDescription>
+          <CardTitle className="text-2xl font-bold text-slate-900 dark:text-white">Admin Login</CardTitle>
+          <CardDescription className="text-slate-500 dark:text-slate-400">
             Enter your username and password to access the dashboard
           </CardDescription>
         </CardHeader>

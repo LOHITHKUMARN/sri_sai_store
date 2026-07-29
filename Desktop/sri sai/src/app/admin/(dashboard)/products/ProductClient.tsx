@@ -312,7 +312,7 @@ export default function ProductClient({
                     <Textarea 
                       value={legacyDescription} 
                       onChange={(e) => setLegacyDescription(e.target.value)}
-                      className="mt-1 bg-white font-mono text-xs"
+                      className="mt-1 bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-100 border-slate-200 dark:border-slate-800 font-mono text-xs"
                       rows={6}
                     />
                   </div>
@@ -487,7 +487,7 @@ export default function ProductClient({
                       AI: Extract Features & Specs
                     </Button>
                   </div>
-                  <ReactQuill theme="snow" value={description} onChange={setDescription} className="bg-white" />
+                  <ReactQuill theme="snow" value={description} onChange={setDescription} className="bg-white dark:bg-slate-950 dark:text-slate-100 rounded-md overflow-hidden border border-slate-200 dark:border-slate-800" />
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -574,14 +574,14 @@ export default function ProductClient({
       
       {/* Filters */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-        <div className="flex overflow-x-auto space-x-2 bg-slate-100 p-1 rounded-lg w-full sm:w-fit scrollbar-hide shrink-0">
-          <button onClick={() => setFilter("ALL")} className={`whitespace-nowrap px-4 py-1.5 text-sm font-medium rounded-md transition ${filter === 'ALL' ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}>All Products</button>
-          <button onClick={() => setFilter("PUBLISHED")} className={`whitespace-nowrap px-4 py-1.5 text-sm font-medium rounded-md transition ${filter === 'PUBLISHED' ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}>Published</button>
-          <button onClick={() => setFilter("DRAFT")} className={`whitespace-nowrap px-4 py-1.5 text-sm font-medium rounded-md transition ${filter === 'DRAFT' ? 'bg-white shadow text-slate-900' : 'text-slate-500 hover:text-slate-900'}`}>Needs Review</button>
+        <div className="flex overflow-x-auto space-x-2 bg-slate-100 dark:bg-slate-800/80 p-1 rounded-xl w-full sm:w-fit scrollbar-hide shrink-0">
+          <button onClick={() => setFilter("ALL")} className={`whitespace-nowrap px-4 py-1.5 text-sm font-semibold rounded-lg transition ${filter === 'ALL' ? 'bg-white dark:bg-slate-900 shadow-2xs text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'}`}>All Products</button>
+          <button onClick={() => setFilter("PUBLISHED")} className={`whitespace-nowrap px-4 py-1.5 text-sm font-semibold rounded-lg transition ${filter === 'PUBLISHED' ? 'bg-white dark:bg-slate-900 shadow-2xs text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'}`}>Published</button>
+          <button onClick={() => setFilter("DRAFT")} className={`whitespace-nowrap px-4 py-1.5 text-sm font-semibold rounded-lg transition ${filter === 'DRAFT' ? 'bg-white dark:bg-slate-900 shadow-2xs text-slate-900 dark:text-white' : 'text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200'}`}>Needs Review</button>
         </div>
         
         <Select value={storeFilter} onValueChange={(val: string | null) => val && setStoreFilter(val)}>
-          <SelectTrigger className="w-full sm:w-[200px] bg-white">
+          <SelectTrigger className="w-full sm:w-[200px] bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
             <span className="truncate">
               {storeFilter === "ALL" ? "All Stores" : stores.find(s => s.id === storeFilter)?.name || "Filter by Store"}
             </span>
@@ -595,54 +595,54 @@ export default function ProductClient({
         </Select>
       </div>
 
-      <div className="border rounded-md bg-white hidden md:block">
+      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 hidden md:block shadow-2xs overflow-hidden">
         <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead className="w-16">Image</TableHead>
-              <TableHead>Name</TableHead>
-              <TableHead>Store / Category</TableHead>
-              <TableHead>Price</TableHead>
-              <TableHead>Status & Stock</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+          <TableHeader className="bg-slate-50 dark:bg-slate-950/50">
+            <TableRow className="border-b border-slate-200 dark:border-slate-800">
+              <TableHead className="w-16 text-slate-700 dark:text-slate-300">Image</TableHead>
+              <TableHead className="text-slate-700 dark:text-slate-300">Name</TableHead>
+              <TableHead className="text-slate-700 dark:text-slate-300">Store / Category</TableHead>
+              <TableHead className="text-slate-700 dark:text-slate-300">Price</TableHead>
+              <TableHead className="text-slate-700 dark:text-slate-300">Status & Stock</TableHead>
+              <TableHead className="text-right text-slate-700 dark:text-slate-300">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredProducts.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={6} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={6} className="text-center py-8 text-slate-500 dark:text-slate-400">
                   No products found.
                 </TableCell>
               </TableRow>
             ) : (
               filteredProducts.map((product) => (
-                <TableRow key={product.id} className={product.status === 'DRAFT' ? 'bg-amber-50/30' : ''}>
+                <TableRow key={product.id} className={`border-b border-slate-100 dark:border-slate-800/60 hover:bg-slate-50/50 dark:hover:bg-slate-800/40 ${product.status === 'DRAFT' ? 'bg-amber-50/20 dark:bg-amber-950/20' : ''}`}>
                   <TableCell>
                     {product.imageUrls[0] ? (
-                      <img src={product.imageUrls[0]} alt={product.name} className="w-10 h-10 object-cover rounded-md border" />
+                      <img src={product.imageUrls[0]} alt={product.name} className="w-10 h-10 object-cover rounded-md border border-slate-200 dark:border-slate-800" />
                     ) : (
-                      <div className="w-10 h-10 bg-gray-100 flex items-center justify-center rounded-md border">
-                        <ImageIcon className="w-4 h-4 text-gray-400" />
+                      <div className="w-10 h-10 bg-slate-100 dark:bg-slate-800 flex items-center justify-center rounded-md border border-slate-200 dark:border-slate-700">
+                        <ImageIcon className="w-4 h-4 text-slate-400" />
                       </div>
                     )}
                   </TableCell>
                   <TableCell>
-                    <div className="font-medium">{product.name}</div>
-                    <div className="text-xs text-muted-foreground">{product.brand}</div>
+                    <div className="font-semibold text-slate-900 dark:text-slate-100">{product.name}</div>
+                    <div className="text-xs text-slate-500 dark:text-slate-400">{product.brand}</div>
                   </TableCell>
                   <TableCell>
-                    <span className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold">
+                    <span className="inline-flex items-center rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 px-2.5 py-0.5 text-xs font-semibold text-slate-700 dark:text-slate-300">
                       {product.store?.name || 'No Store'}
                     </span>
-                    <span className="ml-2 text-xs text-muted-foreground">{product.category?.name || 'No Category'}</span>
+                    <span className="ml-2 text-xs text-slate-500 dark:text-slate-400">{product.category?.name || 'No Category'}</span>
                   </TableCell>
-                  <TableCell>{product.price ? `₹${product.price}` : '-'}</TableCell>
+                  <TableCell className="font-semibold text-slate-900 dark:text-slate-100">{product.price ? `₹${product.price}` : '-'}</TableCell>
                   <TableCell>
                     <div className="flex flex-col space-y-1 items-start">
                       {product.status === 'DRAFT' ? (
-                        <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-800 uppercase">Needs Review</span>
+                        <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 uppercase">Needs Review</span>
                       ) : (
-                        <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold bg-green-100 text-green-800 uppercase">Published</span>
+                        <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold bg-green-100 dark:bg-green-950/70 text-green-800 dark:text-green-300 uppercase">Published</span>
                       )}
                       <Select 
                         value={product.inStock ? "true" : "false"}
@@ -653,21 +653,21 @@ export default function ProductClient({
                           }
                         }}
                       >
-                        <SelectTrigger className={`h-6 text-[10px] font-bold px-2 py-0 border transition uppercase w-fit gap-1 ${product.inStock ? 'border-green-200 bg-green-50 text-green-700' : 'border-red-200 bg-red-50 text-red-700'}`}>
+                        <SelectTrigger className={`h-6 text-[10px] font-bold px-2 py-0 border transition uppercase w-fit gap-1 ${product.inStock ? 'border-green-200 dark:border-green-800 bg-green-50 dark:bg-green-950/50 text-green-700 dark:text-green-300' : 'border-red-200 dark:border-red-800 bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-300'}`}>
                           <span className="truncate">{product.inStock ? "IN STOCK" : "OUT OF STOCK"}</span>
                         </SelectTrigger>
                         <SelectContent>
-                          <SelectItem value="true" className="text-xs font-bold text-green-700">IN STOCK</SelectItem>
-                          <SelectItem value="false" className="text-xs font-bold text-red-700">OUT OF STOCK</SelectItem>
+                          <SelectItem value="true" className="text-xs font-bold text-green-700 dark:text-green-300">IN STOCK</SelectItem>
+                          <SelectItem value="false" className="text-xs font-bold text-red-700 dark:text-red-300">OUT OF STOCK</SelectItem>
                         </SelectContent>
                       </Select>
                     </div>
                   </TableCell>
                   <TableCell className="text-right">
-                    <Button variant="ghost" size="sm" onClick={() => openEdit(product)} className="text-blue-600 hover:text-blue-800 hover:bg-blue-50 mr-2">
+                    <Button variant="ghost" size="sm" onClick={() => openEdit(product)} className="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 hover:bg-blue-50 dark:hover:bg-blue-950/50 mr-2">
                       <Edit2 className="w-4 h-4" />
                     </Button>
-                    <Button variant="ghost" size="sm" onClick={() => handleDelete(product.id)} className="text-red-500 hover:text-red-700 hover:bg-red-50">
+                    <Button variant="ghost" size="sm" onClick={() => handleDelete(product.id)} className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/50">
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </TableCell>
@@ -681,23 +681,23 @@ export default function ProductClient({
       {/* Mobile view - Cards */}
       <div className="md:hidden flex flex-col gap-4">
         {filteredProducts.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground bg-white border rounded-lg">
+          <div className="text-center py-8 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
             No products found.
           </div>
         ) : (
           filteredProducts.map((product) => (
-            <div key={product.id} className={`flex flex-col p-4 bg-white border rounded-xl shadow-sm ${product.status === 'DRAFT' ? 'bg-amber-50/30' : ''}`}>
+            <div key={product.id} className={`flex flex-col p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xs ${product.status === 'DRAFT' ? 'bg-amber-50/20 dark:bg-amber-950/20' : ''}`}>
               <div className="flex gap-4">
-                <div className="w-20 h-20 rounded-md bg-gray-100 flex-shrink-0 border flex items-center justify-center overflow-hidden">
+                <div className="w-20 h-20 rounded-md bg-slate-100 dark:bg-slate-800 flex-shrink-0 border border-slate-200 dark:border-slate-700 flex items-center justify-center overflow-hidden">
                   {product.imageUrls[0] ? (
                     <img src={product.imageUrls[0]} alt={product.name} className="w-full h-full object-cover" />
                   ) : (
-                    <ImageIcon className="w-6 h-6 text-gray-400" />
+                    <ImageIcon className="w-6 h-6 text-slate-400" />
                   )}
                 </div>
                 <div className="flex flex-col flex-1 min-w-0">
-                  <h3 className="font-semibold text-gray-900 truncate">{product.name}</h3>
-                  <span className="text-xs text-muted-foreground truncate">{product.brand}</span>
+                  <h3 className="font-semibold text-slate-900 dark:text-slate-100 truncate">{product.name}</h3>
+                  <span className="text-xs text-slate-500 dark:text-slate-400 truncate">{product.brand}</span>
                   <div className="mt-1 flex flex-wrap gap-1">
                     <span className="inline-flex items-center rounded-full border border-gray-200 bg-gray-50 px-2 py-0.5 text-[10px] font-medium text-gray-600">
                       {product.store?.name || 'No Store'}

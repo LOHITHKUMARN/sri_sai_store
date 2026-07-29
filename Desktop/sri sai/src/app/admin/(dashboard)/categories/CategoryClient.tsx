@@ -114,35 +114,35 @@ export default function CategoryClient({
         </Dialog>
       </div>
 
-      <div className="border rounded-md bg-white hidden md:block">
+      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 hidden md:block shadow-2xs overflow-hidden">
         <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Name</TableHead>
-              <TableHead>Store</TableHead>
-              <TableHead>Products</TableHead>
-              <TableHead className="text-right">Actions</TableHead>
+          <TableHeader className="bg-slate-50 dark:bg-slate-950/50">
+            <TableRow className="border-b border-slate-200 dark:border-slate-800">
+              <TableHead className="text-slate-700 dark:text-slate-300">Name</TableHead>
+              <TableHead className="text-slate-700 dark:text-slate-300">Store</TableHead>
+              <TableHead className="text-slate-700 dark:text-slate-300">Products</TableHead>
+              <TableHead className="text-right text-slate-700 dark:text-slate-300">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {categories.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={4} className="text-center py-6 text-muted-foreground">
+                <TableCell colSpan={4} className="text-center py-6 text-slate-500 dark:text-slate-400">
                   No categories found. Create one to get started.
                 </TableCell>
               </TableRow>
             ) : (
               categories.map((category) => (
-                <TableRow key={category.id}>
-                  <TableCell className="font-medium">{category.name}</TableCell>
-                  <TableCell>{category.store?.name || 'No Store'}</TableCell>
-                  <TableCell>{category._count.products}</TableCell>
+                <TableRow key={category.id} className="border-b border-slate-100 dark:border-slate-800/60 hover:bg-slate-50/50 dark:hover:bg-slate-800/40">
+                  <TableCell className="font-semibold text-slate-900 dark:text-slate-100">{category.name}</TableCell>
+                  <TableCell className="text-slate-700 dark:text-slate-300">{category.store?.name || 'No Store'}</TableCell>
+                  <TableCell className="text-slate-700 dark:text-slate-300">{category._count.products}</TableCell>
                   <TableCell className="text-right">
                     <Button 
                       variant="ghost" 
                       size="sm" 
                       onClick={() => handleDelete(category.id)}
-                      className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                      className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/50"
                     >
                       <Trash2 className="w-4 h-4" />
                     </Button>
@@ -157,27 +157,27 @@ export default function CategoryClient({
       {/* Mobile view - Cards */}
       <div className="md:hidden flex flex-col gap-4">
         {categories.length === 0 ? (
-          <div className="text-center py-6 text-muted-foreground bg-white border rounded-lg">
+          <div className="text-center py-6 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
             No categories found. Create one to get started.
           </div>
         ) : (
           categories.map((category) => (
-            <div key={category.id} className="flex flex-col p-4 bg-white border rounded-xl shadow-sm">
+            <div key={category.id} className="flex flex-col p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xs">
               <div className="flex justify-between items-start mb-2">
                 <div>
-                  <h3 className="font-bold text-gray-900 text-lg">{category.name}</h3>
-                  <span className="inline-flex items-center rounded-full border border-gray-200 bg-gray-50 px-2 py-0.5 text-[10px] font-medium text-gray-600 mt-1">
+                  <h3 className="font-bold text-slate-900 dark:text-slate-100 text-lg">{category.name}</h3>
+                  <span className="inline-flex items-center rounded-full border border-slate-200 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 text-[10px] font-medium text-slate-600 dark:text-slate-300 mt-1">
                     {category.store?.name || 'No Store'}
                   </span>
                 </div>
                 <div className="text-right">
-                  <span className="text-2xl font-bold text-gray-900">{category._count.products}</span>
-                  <div className="text-[10px] text-gray-500 font-medium uppercase tracking-wider">Products</div>
+                  <span className="text-2xl font-bold text-slate-900 dark:text-slate-100">{category._count.products}</span>
+                  <div className="text-[10px] text-slate-500 dark:text-slate-400 font-medium uppercase tracking-wider">Products</div>
                 </div>
               </div>
               
-              <div className="mt-3 flex gap-2 border-t border-gray-100 pt-3">
-                <Button variant="outline" className="flex-1 text-red-600 border-red-200 hover:bg-red-50" onClick={() => handleDelete(category.id)}>
+              <div className="mt-3 flex gap-2 border-t border-slate-100 dark:border-slate-800 pt-3">
+                <Button variant="outline" className="flex-1 text-red-600 dark:text-red-400 border-red-200 dark:border-red-900/60 hover:bg-red-50 dark:hover:bg-red-950/40" onClick={() => handleDelete(category.id)}>
                   <Trash2 className="w-4 h-4 mr-2" /> Delete
                 </Button>
               </div>

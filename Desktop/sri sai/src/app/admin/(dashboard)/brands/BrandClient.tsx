@@ -134,34 +134,34 @@ export default function BrandClient({ initialLogos }: { initialLogos: BrandLogo[
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h1 className="text-2xl font-bold tracking-tight">Authorised Brands</h1>
-          <p className="text-gray-500">Manage the brand logos displayed in the "Leading Brands" section.</p>
+          <h1 className="text-2xl font-bold tracking-tight text-slate-900 dark:text-white">Authorised Brands</h1>
+          <p className="text-slate-500 dark:text-slate-400">Manage the brand logos displayed in the "Leading Brands" section.</p>
         </div>
       </div>
 
-      <div className="flex space-x-1 bg-gray-100 p-1 rounded-lg w-max">
+      <div className="flex space-x-1 bg-slate-100 dark:bg-slate-800 p-1 rounded-xl w-max">
         <button
           onClick={() => handleTabChange("Appliances")}
-          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-            activeTab === "Appliances" ? "bg-white text-black shadow-sm" : "text-gray-500 hover:text-gray-700 hover:bg-gray-200"
+          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
+            activeTab === "Appliances" ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-2xs" : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
           }`}
         >
           Appliances
         </button>
         <button
           onClick={() => handleTabChange("Furniture")}
-          className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${
-            activeTab === "Furniture" ? "bg-white text-black shadow-sm" : "text-gray-500 hover:text-gray-700 hover:bg-gray-200"
+          className={`px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${
+            activeTab === "Furniture" ? "bg-white dark:bg-slate-900 text-slate-900 dark:text-white shadow-2xs" : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200"
           }`}
         >
           Furniture
         </button>
       </div>
       
-      <div className="bg-white rounded-lg border shadow-sm p-6">
-        <div className="mb-6 border-b pb-6">
-           <h3 className="text-lg font-medium mb-2">Add New Brand Logo</h3>
-           <p className="text-sm text-gray-500 mb-4">
+      <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 shadow-2xs p-3.5 sm:p-6">
+        <div className="mb-6 border-b border-slate-100 dark:border-slate-800 pb-6">
+           <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-2">Add New Brand Logo</h3>
+           <p className="text-sm text-slate-500 dark:text-slate-400 mb-4">
              Upload a tightly-cropped logo (transparent background, minimal padding) for best results — recommended height ~100–200px.
            </p>
            
@@ -170,7 +170,7 @@ export default function BrandClient({ initialLogos }: { initialLogos: BrandLogo[
                placeholder="Brand Name (e.g. Samsung)" 
                value={brandName} 
                onChange={e => setBrandName(e.target.value)}
-               className="max-w-xs"
+               className="max-w-xs bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800"
              />
              <input 
                type="file" 
@@ -196,93 +196,110 @@ export default function BrandClient({ initialLogos }: { initialLogos: BrandLogo[
         </div>
         
         {activeLogos.length === 0 ? (
-          <div className="text-center py-12 border-2 border-dashed border-gray-200 rounded-lg bg-gray-50">
-            <ImageIcon className="mx-auto h-12 w-12 text-gray-400 mb-3" />
-            <h3 className="text-sm font-medium text-gray-900">No logos added</h3>
-            <p className="text-sm text-gray-500 mt-1">
+          <div className="text-center py-12 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950/40">
+            <ImageIcon className="mx-auto h-12 w-12 text-slate-400 mb-3" />
+            <h3 className="text-sm font-medium text-slate-900 dark:text-slate-100">No logos added</h3>
+            <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
               Currently using the fallback placeholder logos on the storefront.
             </p>
           </div>
         ) : (
           <div className="space-y-3">
-             <h4 className="text-sm font-medium text-gray-700">Active Brands Sequence ({activeLogos.length})</h4>
+             <h4 className="text-sm font-semibold text-slate-700 dark:text-slate-300">Active Brands Sequence ({activeLogos.length})</h4>
              {activeLogos.map((logo, index) => (
-                <div key={logo.id} className="flex items-center p-3 bg-white border rounded-lg shadow-sm group gap-3 sm:gap-4">
-                  <div className="flex-shrink-0 h-12 w-20 sm:h-16 sm:w-24 rounded-md overflow-hidden bg-white border relative flex items-center justify-center p-2">
-                    <img src={logo.url} alt={logo.name} className="max-h-full max-w-full object-contain" />
-                  </div>
-                  <div className="flex-grow min-w-0">
-                    <div className="text-sm font-medium">{logo.name}</div>
-                    <div className="text-xs text-gray-500 truncate">{logo.url}</div>
-                  </div>
-                  <div className="flex items-center gap-2 flex-wrap sm:flex-nowrap">
-                    <div className="relative">
-                      <select
-                        value={logo.size}
-                        onChange={(e) => handleSizeChange(logo.id, e.target.value)}
-                        disabled={updatingId === logo.id}
-                        className="text-xs border rounded-md px-2 py-1.5 pr-6 appearance-none bg-white min-w-[90px] focus:outline-none focus:ring-1 focus:ring-blue-500"
-                      >
-                        <option value="small">Small</option>
-                        <option value="medium">Medium</option>
-                        <option value="large">Large</option>
-                        <option value="xlarge">Extra Large</option>
-                        <option value="2xlarge">2X Large</option>
-                        <option value="3xlarge">3X Large</option>
-                        <option value="4xlarge">Huge</option>
-                      </select>
-                      {updatingId === logo.id ? (
-                        <Loader2 className="absolute right-1.5 top-2 h-3 w-3 animate-spin text-gray-400" />
-                      ) : successId === logo.id ? (
-                        <Check className="absolute right-1.5 top-2 h-3 w-3 text-green-500" />
-                      ) : (
-                        <div className="absolute right-1.5 top-2.5 w-2 h-2 border-b border-r border-gray-400 transform rotate-45 pointer-events-none" />
-                      )}
+                <div key={logo.id} className="flex flex-col sm:flex-row sm:items-center p-3 sm:p-4 bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xs gap-3">
+                  {/* Top Row / Main Brand Info */}
+                  <div className="flex items-center gap-3 min-w-0 flex-1">
+                    <div className="flex-shrink-0 h-12 w-16 sm:h-16 sm:w-24 rounded-lg overflow-hidden bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 relative flex items-center justify-center p-1.5">
+                      <img src={logo.url} alt={logo.name} className="max-h-full max-w-full object-contain" />
                     </div>
-                    
-                    <label className="flex items-center gap-1.5 text-xs text-gray-600 cursor-pointer ml-2">
-                      <input 
-                        type="checkbox" 
-                        checked={logo.invertInDark} 
-                        onChange={(e) => handleInvertChange(logo.id, e.target.checked)}
-                        disabled={updatingId === logo.id}
-                        className="rounded border-gray-300 text-blue-600 focus:ring-blue-500"
-                      />
-                      <span className="whitespace-nowrap">Invert in Dark</span>
-                    </label>
-                  </div>
-                  <div className="flex items-center gap-1 sm:gap-2 flex-shrink-0">
-                    <div className="flex flex-col gap-1">
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="h-7 w-7"
-                        disabled={index === 0}
-                        onClick={() => handleMove(index, 'up')}
-                      >
-                        <ArrowUp className="h-3 w-3" />
-                      </Button>
-                      <Button
-                        variant="outline"
-                        size="icon"
-                        className="h-7 w-7"
-                        disabled={index === activeLogos.length - 1}
-                        onClick={() => handleMove(index, 'down')}
-                      >
-                        <ArrowDown className="h-3 w-3" />
-                      </Button>
+                    <div className="flex-grow min-w-0">
+                      <div className="text-sm font-bold text-slate-900 dark:text-slate-100 truncate">{logo.name}</div>
+                      <div className="text-[11px] text-slate-500 dark:text-slate-400 truncate max-w-[150px] sm:max-w-xs">{logo.url}</div>
                     </div>
                     <Button
                       variant="destructive"
                       size="icon"
+                      className="sm:hidden h-8 w-8 flex-shrink-0"
                       onClick={() => handleDelete(logo.id)}
                       disabled={deletingId === logo.id}
                     >
-                      {deletingId === logo.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                      {deletingId === logo.id ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Trash2 className="h-3.5 w-3.5" />}
                     </Button>
                   </div>
+
+                  {/* Controls Row: Dropdown, Invert Checkbox, Order Buttons */}
+                  <div className="flex items-center justify-between sm:justify-end gap-2 pt-2.5 sm:pt-0 border-t sm:border-t-0 border-slate-100 dark:border-slate-800/80">
+                    <div className="flex items-center gap-2">
+                      <div className="relative">
+                        <select
+                          value={logo.size}
+                          onChange={(e) => handleSizeChange(logo.id, e.target.value)}
+                          disabled={updatingId === logo.id}
+                          className="text-xs font-medium border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1.5 pr-6 appearance-none bg-slate-50 dark:bg-slate-800 text-slate-800 dark:text-slate-200 min-w-[85px] focus:outline-none focus:ring-1 focus:ring-blue-500"
+                        >
+                          <option value="small">Small</option>
+                          <option value="medium">Medium</option>
+                          <option value="large">Large</option>
+                          <option value="xlarge">XL</option>
+                          <option value="2xlarge">2XL</option>
+                          <option value="3xlarge">3XL</option>
+                          <option value="4xlarge">Huge</option>
+                        </select>
+                        {updatingId === logo.id ? (
+                          <Loader2 className="absolute right-1.5 top-2 h-3 w-3 animate-spin text-slate-400" />
+                        ) : successId === logo.id ? (
+                          <Check className="absolute right-1.5 top-2 h-3 w-3 text-green-500" />
+                        ) : (
+                          <div className="absolute right-2 top-2.5 w-2 h-2 border-b border-r border-slate-400 transform rotate-45 pointer-events-none" />
+                        )}
+                      </div>
+                      
+                      <label className="flex items-center gap-1.5 text-xs text-slate-600 dark:text-slate-300 cursor-pointer select-none">
+                        <input 
+                          type="checkbox" 
+                          checked={logo.invertInDark} 
+                          onChange={(e) => handleInvertChange(logo.id, e.target.checked)}
+                          disabled={updatingId === logo.id}
+                          className="w-4 h-4 rounded border-slate-300 dark:border-slate-700 bg-slate-100 dark:bg-slate-800 text-blue-600 focus:ring-blue-500 accent-blue-600"
+                        />
+                        <span className="whitespace-nowrap">Invert in Dark</span>
+                      </label>
+                    </div>
+
+                    <div className="flex items-center gap-1 flex-shrink-0">
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-7 w-7 border-slate-200 dark:border-slate-800"
+                        disabled={index === 0}
+                        onClick={() => handleMove(index, 'up')}
+                      >
+                        <ArrowUp className="h-3.5 w-3.5" />
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="icon"
+                        className="h-7 w-7 border-slate-200 dark:border-slate-800"
+                        disabled={index === activeLogos.length - 1}
+                        onClick={() => handleMove(index, 'down')}
+                      >
+                        <ArrowDown className="h-3.5 w-3.5" />
+                      </Button>
+
+                      <Button
+                        variant="destructive"
+                        size="icon"
+                        className="hidden sm:flex"
+                        onClick={() => handleDelete(logo.id)}
+                        disabled={deletingId === logo.id}
+                      >
+                        {deletingId === logo.id ? <Loader2 className="h-4 w-4 animate-spin" /> : <Trash2 className="h-4 w-4" />}
+                      </Button>
+                    </div>
+                  </div>
                 </div>
-             ))}
+              ))}
           </div>
         )}
       </div>

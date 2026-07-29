@@ -175,18 +175,20 @@ export default function ListingClient({
     }, 400)
     return () => clearTimeout(timer)
   }, [searchQuery, searchParams, pathname, router])
+  const [mounted, setMounted] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [isMobileFiltersOpen, setIsMobileFiltersOpen] = useState(false)
   const [viewMode, setViewMode] = useState<'grid' | 'list'>("grid")
 
   useEffect(() => {
+    setMounted(true)
     const savedMode = localStorage.getItem('productViewMode')
     if (savedMode === 'grid' || savedMode === 'list') {
       setViewMode(savedMode)
-    } else {
-      setViewMode('grid')
     }
   }, [])
+
+  const activeViewMode = mounted ? viewMode : "grid"
 
   const handleViewModeChange = (mode: 'grid' | 'list') => {
     setViewMode(mode)
@@ -684,14 +686,14 @@ export default function ListingClient({
               <div className="hidden sm:flex items-center border border-gray-300 dark:border-slate-700 rounded-md overflow-hidden bg-white dark:bg-slate-900 ml-2">
                 <button 
                   onClick={() => handleViewModeChange('grid')}
-                  className={`p-2 ${viewMode === 'grid' ? 'bg-gray-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800'}`}
+                  className={`p-2 ${activeViewMode === 'grid' ? 'bg-gray-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800'}`}
                   aria-label="Grid view"
                 >
                   <LayoutGrid className="w-4 h-4" />
                 </button>
                 <button 
                   onClick={() => handleViewModeChange('list')}
-                  className={`p-2 border-l border-gray-300 dark:border-slate-700 ${viewMode === 'list' ? 'bg-gray-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800'}`}
+                  className={`p-2 border-l border-gray-300 dark:border-slate-700 ${activeViewMode === 'list' ? 'bg-gray-100 dark:bg-slate-800 text-blue-600 dark:text-blue-400' : 'text-gray-500 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-slate-800'}`}
                   aria-label="List view"
                 >
                   <ListIcon className="w-4 h-4" />
@@ -711,10 +713,10 @@ export default function ListingClient({
               </button>
             </div>
           ) : (
-            <div className={viewMode === 'grid' ? "grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-6" : "flex flex-col gap-6"}>
+            <div className={activeViewMode === 'grid' ? "grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3.5 sm:gap-6" : "flex flex-col gap-6"}>
               {filteredProducts.map(product => (
                 <Link key={product.id} href={`/product/${product.id}`} className="group block">
-                  {viewMode === 'grid' ? (
+                  {activeViewMode === 'grid' ? (
                     <div className="bg-white dark:bg-slate-950 border dark:border-slate-800 rounded-2xl overflow-hidden shadow-sm hover:shadow-lg transition flex flex-col h-full">
                       <div className="w-full aspect-[4/3] sm:aspect-square bg-white relative overflow-hidden flex items-center justify-center p-3 sm:p-6 border-b dark:border-slate-800">
                         {product.imageUrls[0] ? (

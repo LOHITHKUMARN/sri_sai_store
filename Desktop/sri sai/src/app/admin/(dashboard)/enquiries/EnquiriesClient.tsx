@@ -66,56 +66,56 @@ export default function EnquiriesClient({ enquiries }: { enquiries: Enquiry[] })
         </div>
       </div>
 
-      <div className="border rounded-md bg-white hidden md:block">
+      <div className="border border-slate-200 dark:border-slate-800 rounded-xl bg-white dark:bg-slate-900 hidden md:block shadow-2xs overflow-hidden">
         <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Date</TableHead>
-              <TableHead>Customer</TableHead>
-              <TableHead>Interest</TableHead>
-              <TableHead>Status</TableHead>
-              <TableHead className="text-right">Action</TableHead>
+          <TableHeader className="bg-slate-50 dark:bg-slate-950/50">
+            <TableRow className="border-b border-slate-200 dark:border-slate-800">
+              <TableHead className="text-slate-700 dark:text-slate-300">Date</TableHead>
+              <TableHead className="text-slate-700 dark:text-slate-300">Customer</TableHead>
+              <TableHead className="text-slate-700 dark:text-slate-300">Interest</TableHead>
+              <TableHead className="text-slate-700 dark:text-slate-300">Status</TableHead>
+              <TableHead className="text-right text-slate-700 dark:text-slate-300">Action</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredEnquiries.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={5} className="text-center py-8 text-muted-foreground">
+                <TableCell colSpan={5} className="text-center py-8 text-slate-500 dark:text-slate-400">
                   No enquiries found.
                 </TableCell>
               </TableRow>
             ) : (
               filteredEnquiries.map((enquiry) => (
-                <TableRow key={enquiry.id} className="cursor-pointer hover:bg-gray-50" onClick={() => setSelectedEnquiry(enquiry)}>
-                  <TableCell className="whitespace-nowrap">
+                <TableRow key={enquiry.id} className="border-b border-slate-100 dark:border-slate-800/60 cursor-pointer hover:bg-slate-50/50 dark:hover:bg-slate-800/40" onClick={() => setSelectedEnquiry(enquiry)}>
+                  <TableCell className="whitespace-nowrap font-medium text-slate-900 dark:text-slate-100">
                     {new Date(enquiry.createdAt).toLocaleDateString()}
-                    <div className="text-xs text-gray-400">{new Date(enquiry.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
+                    <div className="text-xs text-slate-500 dark:text-slate-400">{new Date(enquiry.createdAt).toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</div>
                   </TableCell>
                   <TableCell>
-                    <div className="font-medium">{enquiry.name}</div>
-                    <div className="text-xs text-blue-600 flex items-center mt-1">
+                    <div className="font-semibold text-slate-900 dark:text-slate-100">{enquiry.name}</div>
+                    <div className="text-xs text-blue-600 dark:text-blue-400 flex items-center mt-1">
                       {enquiry.preferWhatsapp ? <MessageSquare className="w-3 h-3 mr-1" /> : <Phone className="w-3 h-3 mr-1" />}
                       {enquiry.phone}
                     </div>
                   </TableCell>
                   <TableCell>
                     {enquiry.product ? (
-                      <span className="font-medium text-sm text-gray-900">{enquiry.product.name}</span>
+                      <span className="font-semibold text-sm text-slate-900 dark:text-slate-100">{enquiry.product.name}</span>
                     ) : (
-                      <span className="text-gray-500 text-sm">General Enquiry ({enquiry.storeType})</span>
+                      <span className="text-slate-500 dark:text-slate-400 text-sm">General Enquiry ({enquiry.storeType})</span>
                     )}
                   </TableCell>
                   <TableCell>
-                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold ${
-                      enquiry.status === 'NEW' ? 'bg-blue-100 text-blue-800' :
-                      enquiry.status === 'CONTACTED' ? 'bg-amber-100 text-amber-800' :
-                      'bg-green-100 text-green-800'
+                    <span className={`inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-bold ${
+                      enquiry.status === 'NEW' ? 'bg-blue-100 dark:bg-blue-950/70 text-blue-800 dark:text-blue-300' :
+                      enquiry.status === 'CONTACTED' ? 'bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300' :
+                      'bg-green-100 dark:bg-green-950/70 text-green-800 dark:text-green-300'
                     }`}>
                       {enquiry.status}
                     </span>
                   </TableCell>
                   <TableCell className="text-right">
-                    <button className="text-sm text-blue-600 font-medium">View Details</button>
+                    <button className="text-sm text-blue-600 dark:text-blue-400 font-semibold hover:underline">View Details</button>
                   </TableCell>
                 </TableRow>
               ))
@@ -127,27 +127,27 @@ export default function EnquiriesClient({ enquiries }: { enquiries: Enquiry[] })
       {/* Mobile view - Cards */}
       <div className="md:hidden flex flex-col gap-4">
         {filteredEnquiries.length === 0 ? (
-          <div className="text-center py-8 text-muted-foreground bg-white border rounded-lg">
+          <div className="text-center py-8 text-slate-500 dark:text-slate-400 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl">
             No enquiries found.
           </div>
         ) : (
           filteredEnquiries.map((enquiry) => (
             <div 
               key={enquiry.id} 
-              className="flex flex-col p-4 bg-white border rounded-xl shadow-sm cursor-pointer hover:bg-gray-50"
+              className="flex flex-col p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xs cursor-pointer hover:bg-slate-50 dark:hover:bg-slate-800/40"
               onClick={() => setSelectedEnquiry(enquiry)}
             >
               <div className="flex justify-between items-start mb-2">
                 <div>
-                  <h3 className="font-bold text-gray-900">{enquiry.name}</h3>
-                  <div className="text-xs text-blue-600 flex items-center mt-1">
+                  <h3 className="font-bold text-slate-900 dark:text-slate-100">{enquiry.name}</h3>
+                  <div className="text-xs text-blue-600 dark:text-blue-400 flex items-center mt-1">
                     {enquiry.preferWhatsapp ? <MessageSquare className="w-3 h-3 mr-1" /> : <Phone className="w-3 h-3 mr-1" />}
                     {enquiry.phone}
                   </div>
                 </div>
                 <div className="text-right">
                   <span className={`inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold uppercase ${
-                    enquiry.status === 'NEW' ? 'bg-blue-100 text-blue-800' :
+                    enquiry.status === 'NEW' ? 'bg-blue-100 dark:bg-blue-950/70 text-blue-800 dark:text-blue-300' :
                     enquiry.status === 'CONTACTED' ? 'bg-amber-100 text-amber-800' :
                     'bg-green-100 text-green-800'
                   }`}>
@@ -251,18 +251,18 @@ export default function EnquiriesClient({ enquiries }: { enquiries: Enquiry[] })
                 </div>
 
                 <div>
-                  <h3 className="text-sm font-semibold text-gray-500 mb-3 flex items-center">
+                  <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 mb-3 flex items-center">
                     <History className="w-4 h-4 mr-2" /> Browsing History
                   </h3>
-                  <div className="bg-white border rounded-lg overflow-hidden text-sm">
+                  <div className="bg-white dark:bg-slate-950 border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden text-sm">
                     {selectedEnquiry.session && selectedEnquiry.session.visits.length > 0 ? (
-                      <ul className="divide-y max-h-48 overflow-y-auto">
+                      <ul className="divide-y divide-slate-100 dark:divide-slate-800 max-h-48 overflow-y-auto">
                         {selectedEnquiry.session.visits.map(visit => (
-                          <li key={visit.id} className="p-3 hover:bg-gray-50">
-                            <div className="flex justify-between text-xs text-gray-400 mb-1">
+                          <li key={visit.id} className="p-3 hover:bg-slate-50 dark:hover:bg-slate-900">
+                            <div className="flex justify-between text-xs text-slate-400 dark:text-slate-500 mb-1">
                               <span>{new Date(visit.createdAt).toLocaleDateString()} {new Date(visit.createdAt).toLocaleTimeString()}</span>
                             </div>
-                            <div className="font-medium text-blue-600 truncate">
+                            <div className="font-medium text-blue-600 dark:text-blue-400 truncate">
                               {visit.product ? visit.product.name : visit.pageUrl}
                             </div>
                           </li>

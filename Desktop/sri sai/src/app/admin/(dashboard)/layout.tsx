@@ -1,14 +1,10 @@
 import { ReactNode } from "react"
 import Link from "next/link"
-import { getServerSession } from "next-auth/next"
-import { authOptions } from "@/lib/auth"
-import { redirect } from "next/navigation"
 import { 
   LayoutDashboard, 
   ShoppingBag, 
   Layers, 
   MessageSquare, 
-  Settings, 
   LogOut,
   Star,
   Flame,
@@ -16,74 +12,69 @@ import {
   Award
 } from "lucide-react"
 
-import MobileAdminSidebar from "./MobileAdminSidebar"
+import { AdminThemeProvider } from "@/components/admin/AdminThemeProvider"
+import AdminHeader from "@/components/admin/AdminHeader"
 
 export default async function AdminLayout({ children }: { children: ReactNode }) {
-  const session = await getServerSession(authOptions)
-  
-  // Middleware handles auth protection, so we don't need a manual redirect here.
-
   return (
-    <div className="flex min-h-screen w-full bg-gray-100 text-gray-900">
-      {/* Sidebar */}
-      <aside className="w-64 bg-white border-r border-gray-200 hidden md:block">
-        <div className="h-full flex flex-col">
-          <div className="h-16 flex items-center px-6 border-b border-gray-200">
-            <span className="font-bold text-xl text-primary">Sri Sai Admin</span>
-          </div>
-          <nav className="flex-1 px-4 py-6 space-y-2 overflow-y-auto">
-            <Link href="/admin" className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-              <LayoutDashboard className="h-5 w-5" />
-              <span>Dashboard</span>
-            </Link>
-            <Link href="/admin/categories" className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-              <Layers className="h-5 w-5" />
-              <span>Categories</span>
-            </Link>
-            <Link href="/admin/products" className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-              <ShoppingBag className="h-5 w-5" />
-              <span>Products</span>
-            </Link>
-            <Link href="/admin/featured" className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-              <Star className="h-5 w-5" />
-              <span>Featured Arrivals</span>
-            </Link>
-            <Link href="/admin/bestsellers" className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-              <Flame className="h-5 w-5 text-amber-500" />
-              <span>Best Sellers</span>
-            </Link>
-            <Link href="/admin/hero" className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-              <ImageIcon className="h-5 w-5" />
-              <span>Hero Carousel</span>
-            </Link>
-            <Link href="/admin/brands" className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-              <Award className="h-5 w-5" />
-              <span>Brands</span>
-            </Link>
-            <Link href="/admin/enquiries" className="flex items-center gap-3 px-3 py-2 text-gray-700 hover:bg-gray-100 rounded-md">
-              <MessageSquare className="h-5 w-5" />
-              <span>Enquiries</span>
-            </Link>
-          </nav>
-          <div className="p-4 border-t border-gray-200">
-            <Link href="/api/auth/signout" className="flex items-center gap-3 px-3 py-2 text-red-600 hover:bg-red-50 rounded-md">
-              <LogOut className="h-5 w-5" />
-              <span>Sign Out</span>
-            </Link>
-          </div>
-        </div>
-      </aside>
+    <AdminThemeProvider>
+      <div className="flex flex-col min-h-screen w-full">
+        {/* Top Menu Bar Header with Logo & Admin Dark Mode Toggle */}
+        <AdminHeader />
 
-      {/* Main Content */}
-      <main className="flex-1 flex flex-col h-screen overflow-hidden">
-        <header className="h-16 bg-white border-b border-gray-200 flex items-center justify-between px-6 md:hidden">
-          <span className="font-bold text-lg">Sri Sai Admin</span>
-          <MobileAdminSidebar />
-        </header>
-        <div className="flex-1 overflow-auto p-6 md:p-8">
-          {children}
+        <div className="flex flex-1 w-full overflow-hidden">
+          {/* Desktop Left Sidebar */}
+          <aside className="w-64 bg-white dark:bg-slate-900 border-r border-slate-200 dark:border-slate-800 hidden md:block flex-shrink-0">
+            <div className="h-full flex flex-col justify-between">
+              <nav className="p-4 space-y-1.5 overflow-y-auto">
+                <Link href="/admin" className="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                  <LayoutDashboard className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                  <span>Dashboard</span>
+                </Link>
+                <Link href="/admin/categories" className="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                  <Layers className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                  <span>Categories</span>
+                </Link>
+                <Link href="/admin/products" className="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                  <ShoppingBag className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                  <span>Products</span>
+                </Link>
+                <Link href="/admin/featured" className="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                  <Star className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                  <span>Featured Arrivals</span>
+                </Link>
+                <Link href="/admin/bestsellers" className="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                  <Flame className="h-4 w-4 text-amber-500" />
+                  <span>Best Sellers</span>
+                </Link>
+                <Link href="/admin/hero" className="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                  <ImageIcon className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                  <span>Hero Carousel</span>
+                </Link>
+                <Link href="/admin/brands" className="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                  <Award className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                  <span>Brands</span>
+                </Link>
+                <Link href="/admin/enquiries" className="flex items-center gap-3 px-3 py-2.5 text-sm font-semibold text-slate-700 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-xl transition-colors">
+                  <MessageSquare className="h-4 w-4 text-slate-500 dark:text-slate-400" />
+                  <span>Enquiries</span>
+                </Link>
+              </nav>
+              <div className="p-4 border-t border-slate-200 dark:border-slate-800">
+                <Link href="/api/auth/signout" className="flex items-center gap-3 px-3 py-2 text-sm font-semibold text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-xl transition-colors">
+                  <LogOut className="h-4 w-4" />
+                  <span>Sign Out</span>
+                </Link>
+              </div>
+            </div>
+          </aside>
+
+          {/* Main Content Viewport */}
+          <main className="flex-1 overflow-y-auto p-3 sm:p-6 md:p-8 bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-[calc(100vh-4rem)]">
+            {children}
+          </main>
         </div>
-      </main>
-    </div>
+      </div>
+    </AdminThemeProvider>
   )
 }

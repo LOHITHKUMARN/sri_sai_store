@@ -150,36 +150,36 @@ export default function CuratedProductList({
   const renderFallbackTable = () => {
     if (fallbackProducts.length === 0) return null;
     return (
-      <div className="mt-8 border-t pt-6 bg-slate-50/50 -mx-4 md:-mx-6 px-4 md:px-6 rounded-b-lg pb-6">
-        <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wider mb-1 flex items-center gap-2">
-          <span className="bg-slate-200 text-slate-700 text-[10px] px-2 py-0.5 rounded font-bold">FALLBACK</span>
+      <div className="mt-8 border-t border-slate-200 dark:border-slate-800 pt-6 bg-slate-50/50 dark:bg-slate-950/40 -mx-4 md:-mx-6 px-4 md:px-6 rounded-b-lg pb-6">
+        <h3 className="text-sm font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider mb-1 flex items-center gap-2">
+          <span className="bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] px-2 py-0.5 rounded font-bold">FALLBACK</span>
           Currently Showing
         </h3>
-        <p className="text-xs text-slate-500 mb-4">Automatically filling empty slots with latest {activeTab.toLowerCase()}</p>
+        <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">Automatically filling empty slots with latest {activeTab.toLowerCase()}</p>
         
         {/* Desktop Fallback */}
-        <div className="hidden md:block border rounded-md overflow-hidden opacity-75">
+        <div className="hidden md:block border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden opacity-75">
           <Table>
             <TableBody>
               {fallbackProducts.map((product, index) => (
-                <TableRow key={product.id} className="bg-white">
+                <TableRow key={product.id} className="bg-white dark:bg-slate-900 border-b border-slate-100 dark:border-slate-800/60">
                   <TableCell className="w-[80px]">
-                    <span className="text-xs font-mono text-slate-400 pl-4">{activeCurated.length + index + 1}</span>
+                    <span className="text-xs font-mono text-slate-400 dark:text-slate-500 pl-4">{activeCurated.length + index + 1}</span>
                   </TableCell>
                   <TableCell>
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded border bg-slate-50 overflow-hidden flex-shrink-0">
+                      <div className="w-10 h-10 rounded border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 overflow-hidden flex-shrink-0">
                         {product.imageUrls?.[0] && (
                           <img src={product.imageUrls[0]} alt={product.name} className="w-full h-full object-cover grayscale opacity-70" />
                         )}
                       </div>
                       <div>
-                        <div className="font-medium line-clamp-1">{product.name}</div>
+                        <div className="font-semibold text-slate-900 dark:text-slate-100 line-clamp-1">{product.name}</div>
                       </div>
                     </div>
                   </TableCell>
                   <TableCell>
-                    <span className="text-sm text-slate-500">{product.category?.name || '-'}</span>
+                    <span className="text-sm text-slate-500 dark:text-slate-400">{product.category?.name || '-'}</span>
                   </TableCell>
                   <TableCell className="text-right">
                     <Button 
@@ -202,18 +202,18 @@ export default function CuratedProductList({
         {/* Mobile Fallback */}
         <div className="md:hidden space-y-3 opacity-75">
           {fallbackProducts.map((product, index) => (
-            <div key={product.id} className="bg-white border rounded-lg p-3 flex flex-col gap-3 shadow-sm">
+            <div key={product.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex flex-col gap-3 shadow-2xs">
               <div className="flex items-start gap-3">
-                <div className="text-xs font-mono text-slate-400 pt-1 font-bold">{activeCurated.length + index + 1}.</div>
-                <div className="w-16 h-16 rounded border bg-slate-50 overflow-hidden flex-shrink-0">
+                <div className="text-xs font-mono text-slate-400 dark:text-slate-500 pt-1 font-bold">{activeCurated.length + index + 1}.</div>
+                <div className="w-16 h-16 rounded border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 overflow-hidden flex-shrink-0">
                   {product.imageUrls?.[0] && (
                     <img src={product.imageUrls[0]} alt={product.name} className="w-full h-full object-cover grayscale opacity-70" />
                   )}
                 </div>
                 <div className="flex-1 min-w-0 flex flex-col">
-                  <div className="font-medium text-sm line-clamp-2 leading-tight">{product.name}</div>
+                  <div className="font-semibold text-slate-900 dark:text-slate-100 text-sm line-clamp-2 leading-tight">{product.name}</div>
                   <div className="mt-1">
-                    <span className="inline-block bg-slate-100 text-slate-600 text-[10px] px-1.5 py-0.5 rounded truncate max-w-full">
+                    <span className="inline-block bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[10px] px-1.5 py-0.5 rounded truncate max-w-full">
                       {product.category?.name || 'Uncategorized'}
                     </span>
                   </div>
@@ -240,59 +240,59 @@ export default function CuratedProductList({
     <div className="space-y-6">
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4">
         <div>
-          <h1 className="text-3xl font-bold tracking-tight">{title}</h1>
-          <p className="text-gray-500 mt-1">{description}</p>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900 dark:text-white">{title}</h1>
+          <p className="text-slate-500 dark:text-slate-400 mt-1">{description}</p>
         </div>
         
         <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3">
           <Link href={`/${activeTab.toLowerCase()}`} target="_blank">
-            <Button variant="outline" className="w-full sm:w-auto flex items-center justify-center gap-2 h-11 sm:h-9">
+            <Button variant="outline" className="w-full sm:w-auto flex items-center justify-center gap-2 h-11 sm:h-9 border-slate-200 dark:border-slate-800">
               <ExternalLink className="w-4 h-4" /> <span className="hidden sm:inline">Preview {activeTab}</span><span className="sm:hidden">Preview</span>
             </Button>
           </Link>
           
           <Button 
             disabled={activeCurated.length >= maxItems} 
-            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-primary h-11 sm:h-9"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white h-11 sm:h-9"
             onClick={() => setIsDialogOpen(true)}
           >
             <Plus className="w-4 h-4" /> Add Item
           </Button>
           
           <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-            <DialogContent className="sm:max-w-[500px] w-[calc(100%-2rem)] max-w-lg rounded-lg max-h-[90vh] flex flex-col p-4 sm:p-6">
+            <DialogContent className="sm:max-w-[500px] w-[calc(100%-2rem)] max-w-lg rounded-xl max-h-[90vh] flex flex-col p-4 sm:p-6 bg-white dark:bg-slate-900 border-slate-200 dark:border-slate-800">
               <DialogHeader>
-                <DialogTitle>Add to {title} ({activeTab})</DialogTitle>
-                <p className="text-sm text-muted-foreground">Search by product name. You can curate up to {maxItems} items per store.</p>
+                <DialogTitle className="text-slate-900 dark:text-white">Add to {title} ({activeTab})</DialogTitle>
+                <p className="text-sm text-slate-500 dark:text-slate-400">Search by product name. You can curate up to {maxItems} items per store.</p>
               </DialogHeader>
               
               <div className="relative mt-4">
-                <Search className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                <Search className="absolute left-3 top-3 h-4 w-4 text-slate-400" />
                 <Input 
                   placeholder={`Search ${activeTab.toLowerCase()}...`} 
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
-                  className="pl-9"
+                  className="pl-9 bg-white dark:bg-slate-950 border-slate-200 dark:border-slate-800"
                 />
               </div>
               
-              <div className="mt-4 flex-1 overflow-y-auto space-y-2 border rounded-md p-2 bg-slate-50/30">
+              <div className="mt-4 flex-1 overflow-y-auto space-y-2 border border-slate-200 dark:border-slate-800 rounded-xl p-2 bg-slate-50/50 dark:bg-slate-950/40">
                 {filteredAvailable.length === 0 ? (
-                  <p className="text-center text-sm text-muted-foreground py-8">No unselected {activeTab.toLowerCase()} found.</p>
+                  <p className="text-center text-sm text-slate-500 dark:text-slate-400 py-8">No unselected {activeTab.toLowerCase()} found.</p>
                 ) : (
                   filteredAvailable.map(product => (
-                    <div key={product.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-white rounded-md border border-transparent sm:hover:border-slate-200 shadow-sm sm:shadow-none transition-colors gap-3">
+                    <div key={product.id} className="flex flex-col sm:flex-row sm:items-center justify-between p-3 bg-white dark:bg-slate-900 rounded-lg border border-slate-200 dark:border-slate-800 shadow-2xs gap-3">
                       <div className="flex items-center gap-3 w-full sm:w-auto">
-                        <div className="w-12 h-12 sm:w-10 sm:h-10 rounded overflow-hidden bg-slate-100 flex-shrink-0 border">
+                        <div className="w-12 h-12 sm:w-10 sm:h-10 rounded overflow-hidden bg-slate-100 dark:bg-slate-800 flex-shrink-0 border border-slate-200 dark:border-slate-700">
                           {product.imageUrls?.[0] ? (
                             <img src={product.imageUrls[0]} alt={product.name} className="w-full h-full object-cover" />
                           ) : (
-                            <div className="w-full h-full bg-slate-200" />
+                            <div className="w-full h-full bg-slate-200 dark:bg-slate-800" />
                           )}
                         </div>
                         <div className="flex flex-col flex-1 min-w-0">
-                          <span className="text-sm font-medium line-clamp-1">{product.name}</span>
-                          <span className="text-xs text-muted-foreground truncate">{product.category?.name || "Uncategorized"}</span>
+                          <span className="text-sm font-semibold text-slate-900 dark:text-slate-100 line-clamp-1">{product.name}</span>
+                          <span className="text-xs text-slate-500 dark:text-slate-400 truncate">{product.category?.name || "Uncategorized"}</span>
                         </div>
                       </div>
                       <Button 
@@ -315,25 +315,25 @@ export default function CuratedProductList({
         </div>
       </div>
 
-      <div className="bg-white rounded-lg shadow border overflow-hidden">
+      <div className="bg-white dark:bg-slate-900 rounded-xl shadow-2xs border border-slate-200 dark:border-slate-800 overflow-hidden">
         {/* Tabs Header */}
-        <div className="flex border-b">
+        <div className="flex border-b border-slate-200 dark:border-slate-800">
           <button
             onClick={() => handleTabChange("Appliances")}
-            className={`flex-1 py-4 text-sm font-medium transition-colors ${
+            className={`flex-1 py-4 text-sm font-semibold transition-colors ${
               activeTab === "Appliances"
-                ? "border-b-2 border-primary text-primary bg-slate-50/50"
-                : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
+                ? "border-b-2 border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 bg-slate-50/50 dark:bg-slate-950/40"
+                : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/50"
             }`}
           >
             Appliances
           </button>
           <button
             onClick={() => handleTabChange("Furniture")}
-            className={`flex-1 py-4 text-sm font-medium transition-colors ${
+            className={`flex-1 py-4 text-sm font-semibold transition-colors ${
               activeTab === "Furniture"
-                ? "border-b-2 border-primary text-primary bg-slate-50/50"
-                : "text-slate-500 hover:text-slate-700 hover:bg-slate-50"
+                ? "border-b-2 border-blue-600 dark:border-blue-400 text-blue-600 dark:text-blue-400 bg-slate-50/50 dark:bg-slate-950/40"
+                : "text-slate-500 dark:text-slate-400 hover:text-slate-900 dark:hover:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-800/50"
             }`}
           >
             Furniture
@@ -342,14 +342,14 @@ export default function CuratedProductList({
 
         <div className="p-4 md:p-6 relative">
           {isSaving && (
-            <div className="absolute inset-0 bg-white/50 backdrop-blur-[1px] z-10 flex items-center justify-center">
-              <Loader2 className="w-6 h-6 animate-spin text-primary" />
+            <div className="absolute inset-0 bg-white/50 dark:bg-slate-900/50 backdrop-blur-[1px] z-10 flex items-center justify-center">
+              <Loader2 className="w-6 h-6 animate-spin text-blue-600 dark:text-blue-400" />
             </div>
           )}
 
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
-            <h2 className="text-lg font-semibold">{activeTab} Lineup</h2>
-            <span className={`text-sm font-medium px-2.5 py-1 rounded-full w-max ${activeCurated.length >= maxItems ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-700'}`}>
+            <h2 className="text-lg font-bold text-slate-900 dark:text-white">{activeTab} Lineup</h2>
+            <span className={`text-sm font-bold px-2.5 py-1 rounded-full w-max ${activeCurated.length >= maxItems ? 'bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300' : 'bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300'}`}>
               <span className="hidden sm:inline">{activeCurated.length} / {maxItems} Selected</span>
               <span className="sm:hidden">{activeCurated.length}/{maxItems}</span>
             </span>
@@ -357,12 +357,12 @@ export default function CuratedProductList({
           
           {activeCurated.length === 0 ? (
             <div className="space-y-6">
-              <div className="text-center py-8 border-2 border-dashed rounded-lg bg-slate-50">
-                <h3 className="text-lg font-medium text-slate-900 mb-1">No manually curated {activeTab.toLowerCase()}</h3>
-                <p className="text-sm text-slate-500 max-w-md mx-auto mb-4">
+              <div className="text-center py-8 border-2 border-dashed border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50 dark:bg-slate-950/40">
+                <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-1">No manually curated {activeTab.toLowerCase()}</h3>
+                <p className="text-sm text-slate-500 dark:text-slate-400 max-w-md mx-auto mb-4">
                   Because this list is empty, your homepage is currently falling back to showing these newest products below. 
                 </p>
-                <Button onClick={() => setIsDialogOpen(true)} variant="outline">
+                <Button onClick={() => setIsDialogOpen(true)} variant="outline" className="border-slate-200 dark:border-slate-800">
                   Browse {activeTab}
                 </Button>
               </div>
@@ -372,34 +372,34 @@ export default function CuratedProductList({
           ) : (
             <div>
               {/* Desktop Table */}
-              <div className="hidden md:block border rounded-md overflow-hidden">
+              <div className="hidden md:block border border-slate-200 dark:border-slate-800 rounded-xl overflow-hidden">
                 <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead className="w-[80px]">Order</TableHead>
-                      <TableHead>Product</TableHead>
-                      <TableHead>Category</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
+                  <TableHeader className="bg-slate-50 dark:bg-slate-950/50">
+                    <TableRow className="border-b border-slate-200 dark:border-slate-800">
+                      <TableHead className="w-[80px] text-slate-700 dark:text-slate-300">Order</TableHead>
+                      <TableHead className="text-slate-700 dark:text-slate-300">Product</TableHead>
+                      <TableHead className="text-slate-700 dark:text-slate-300">Category</TableHead>
+                      <TableHead className="text-slate-700 dark:text-slate-300">Status</TableHead>
+                      <TableHead className="text-right text-slate-700 dark:text-slate-300">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {activeCurated.map((product, index) => (
-                      <TableRow key={product.id}>
+                      <TableRow key={product.id} className="border-b border-slate-100 dark:border-slate-800/60 hover:bg-slate-50/50 dark:hover:bg-slate-800/40">
                         <TableCell>
                           <div className="flex flex-col gap-1 items-center justify-center w-8">
                             <button 
                               onClick={() => handleMove(index, 'up')}
                               disabled={index === 0}
-                              className="p-1 hover:bg-slate-100 rounded disabled:opacity-30 disabled:cursor-not-allowed text-slate-600 hover:text-slate-900"
+                              className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded disabled:opacity-30 disabled:cursor-not-allowed text-slate-600 dark:text-slate-300"
                             >
                               <ArrowUp className="w-4 h-4" />
                             </button>
-                            <span className="text-xs font-bold font-mono">{index + 1}</span>
+                            <span className="text-xs font-bold font-mono text-slate-900 dark:text-slate-100">{index + 1}</span>
                             <button 
                               onClick={() => handleMove(index, 'down')}
                               disabled={index === activeCurated.length - 1}
-                              className="p-1 hover:bg-slate-100 rounded disabled:opacity-30 disabled:cursor-not-allowed text-slate-600 hover:text-slate-900"
+                              className="p-1 hover:bg-slate-100 dark:hover:bg-slate-800 rounded disabled:opacity-30 disabled:cursor-not-allowed text-slate-600 dark:text-slate-300"
                             >
                               <ArrowDown className="w-4 h-4" />
                             </button>
@@ -407,25 +407,25 @@ export default function CuratedProductList({
                         </TableCell>
                         <TableCell>
                           <div className="flex items-center gap-3">
-                            <div className="w-12 h-12 rounded border bg-slate-50 overflow-hidden flex-shrink-0">
+                            <div className="w-12 h-12 rounded border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 overflow-hidden flex-shrink-0">
                               {product.imageUrls?.[0] && (
                                 <img src={product.imageUrls[0]} alt={product.name} className="w-full h-full object-cover" />
                               )}
                             </div>
                             <div>
-                              <div className="font-medium line-clamp-1">{product.name}</div>
-                              {product.brand && <div className="text-xs text-muted-foreground">{product.brand}</div>}
+                              <div className="font-semibold text-slate-900 dark:text-slate-100 line-clamp-1">{product.name}</div>
+                              {product.brand && <div className="text-xs text-slate-500 dark:text-slate-400">{product.brand}</div>}
                             </div>
                           </div>
                         </TableCell>
                         <TableCell>
-                          <span className="text-sm text-slate-600">{product.category?.name || '-'}</span>
+                          <span className="text-sm text-slate-600 dark:text-slate-300">{product.category?.name || '-'}</span>
                         </TableCell>
                         <TableCell>
                           {product.status === 'PUBLISHED' ? (
-                            <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold bg-green-100 text-green-800 uppercase">Published</span>
+                            <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold bg-green-100 dark:bg-green-950/70 text-green-800 dark:text-green-300 uppercase">Published</span>
                           ) : (
-                            <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-800 uppercase">Draft</span>
+                            <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[10px] font-bold bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 uppercase">Draft</span>
                           )}
                         </TableCell>
                         <TableCell className="text-right">
@@ -434,7 +434,7 @@ export default function CuratedProductList({
                             size="sm" 
                             onClick={() => handleRemove(product.id)}
                             disabled={loadingId === product.id}
-                            className="text-red-500 hover:text-red-700 hover:bg-red-50"
+                            className="text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/50"
                             title="Remove from List"
                           >
                             {loadingId === product.id ? <Loader2 className="w-4 h-4 animate-spin" /> : <Trash2 className="w-4 h-4" />}
@@ -449,43 +449,43 @@ export default function CuratedProductList({
               {/* Mobile Cards */}
               <div className="md:hidden space-y-3">
                 {activeCurated.map((product, index) => (
-                  <div key={product.id} className="bg-white border rounded-lg p-3 flex flex-col gap-3 shadow-sm">
+                  <div key={product.id} className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl p-3 flex flex-col gap-3 shadow-2xs">
                     <div className="flex items-start gap-3">
-                      <div className="flex flex-col gap-1 items-center justify-center w-10 flex-shrink-0 bg-slate-50 py-1 rounded">
+                      <div className="flex flex-col gap-1 items-center justify-center w-10 flex-shrink-0 bg-slate-50 dark:bg-slate-800 py-1 rounded-lg border border-slate-200 dark:border-slate-700">
                         <button 
                           onClick={() => handleMove(index, 'up')}
                           disabled={index === 0}
-                          className="p-2 rounded disabled:opacity-30 disabled:cursor-not-allowed text-slate-600 hover:text-slate-900 active:bg-slate-200"
+                          className="p-1 rounded disabled:opacity-30 disabled:cursor-not-allowed text-slate-600 dark:text-slate-300 hover:text-slate-900"
                         >
                           <ArrowUp className="w-5 h-5" />
                         </button>
-                        <span className="text-sm font-bold font-mono">{index + 1}</span>
+                        <span className="text-sm font-bold font-mono text-slate-900 dark:text-slate-100">{index + 1}</span>
                         <button 
                           onClick={() => handleMove(index, 'down')}
                           disabled={index === activeCurated.length - 1}
-                          className="p-2 rounded disabled:opacity-30 disabled:cursor-not-allowed text-slate-600 hover:text-slate-900 active:bg-slate-200"
+                          className="p-1 rounded disabled:opacity-30 disabled:cursor-not-allowed text-slate-600 dark:text-slate-300 hover:text-slate-900"
                         >
                           <ArrowDown className="w-5 h-5" />
                         </button>
                       </div>
                       
-                      <div className="w-16 h-16 rounded border bg-slate-50 overflow-hidden flex-shrink-0">
+                      <div className="w-16 h-16 rounded border border-slate-200 dark:border-slate-800 bg-slate-50 dark:bg-slate-800 overflow-hidden flex-shrink-0">
                         {product.imageUrls?.[0] && (
                           <img src={product.imageUrls[0]} alt={product.name} className="w-full h-full object-cover" />
                         )}
                       </div>
                       
                       <div className="flex-1 min-w-0 flex flex-col pt-1">
-                        <div className="font-medium text-sm line-clamp-2 leading-tight">{product.name}</div>
-                        {product.brand && <div className="text-xs text-muted-foreground mt-0.5">{product.brand}</div>}
+                        <div className="font-semibold text-slate-900 dark:text-slate-100 text-sm line-clamp-2 leading-tight">{product.name}</div>
+                        {product.brand && <div className="text-xs text-slate-500 dark:text-slate-400 mt-0.5">{product.brand}</div>}
                         <div className="mt-2 flex flex-wrap gap-2">
-                          <span className="inline-block bg-slate-100 text-slate-600 text-[10px] px-1.5 py-0.5 rounded truncate max-w-full">
+                          <span className="inline-block bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 text-[10px] px-1.5 py-0.5 rounded truncate max-w-full">
                             {product.category?.name || 'Uncategorized'}
                           </span>
                           {product.status === 'PUBLISHED' ? (
-                            <span className="inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-bold bg-green-100 text-green-800 uppercase">PUB</span>
+                            <span className="inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-bold bg-green-100 dark:bg-green-950/70 text-green-800 dark:text-green-300 uppercase">PUB</span>
                           ) : (
-                            <span className="inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-bold bg-amber-100 text-amber-800 uppercase">DRF</span>
+                            <span className="inline-flex items-center rounded-full px-1.5 py-0.5 text-[10px] font-bold bg-amber-100 dark:bg-amber-950/70 text-amber-800 dark:text-amber-300 uppercase">DRF</span>
                           )}
                         </div>
                       </div>
@@ -495,7 +495,7 @@ export default function CuratedProductList({
                       variant="outline" 
                       onClick={() => handleRemove(product.id)}
                       disabled={loadingId === product.id}
-                      className="w-full h-11 text-red-600 border-red-200 hover:bg-red-50 hover:text-red-700"
+                      className="w-full h-11 text-red-600 dark:text-red-400 border-red-200 dark:border-red-900/60 hover:bg-red-50 dark:hover:bg-red-950/40"
                     >
                       {loadingId === product.id ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Trash2 className="w-4 h-4 mr-2" />}
                       Remove from {title}

@@ -186,12 +186,12 @@ export default function HomeClient({
       </section>
 
       {/* 2. Shop by Room */}
-      <section className="py-16 bg-white dark:bg-slate-950 border-t dark:border-slate-800">
+      <section className="py-12 sm:py-16 bg-white dark:bg-slate-950 border-t dark:border-slate-800">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-end mb-12">
+          <div className="flex justify-between items-end mb-8 sm:mb-12">
             <div>
-              <h2 className="text-4xl md:text-5xl font-serif text-gray-900 dark:text-white mb-3 font-normal">Shop by room</h2>
-              <p className="text-gray-500 dark:text-gray-400 max-w-2xl text-lg font-light tracking-wide">
+              <h2 className="text-2xl sm:text-4xl md:text-5xl font-serif text-gray-900 dark:text-white mb-2 sm:mb-3 font-normal">Shop by room</h2>
+              <p className="text-gray-500 dark:text-gray-400 max-w-2xl text-sm sm:text-lg font-light tracking-wide">
                 {isAppliance 
                   ? "Discover the perfect appliances for every corner of your home." 
                   : "Curate your perfect living space, room by room."}
@@ -199,19 +199,19 @@ export default function HomeClient({
             </div>
             <Link href={`/${activeStore}`} className="text-slate-500 dark:text-slate-400 font-medium hover:text-slate-900 dark:hover:text-white transition-colors hidden sm:block">View all rooms &rarr;</Link>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-8">
             {(isAppliance ? [
-              { name: "Kitchen", desc: "Fridges, cooktops, mixers", img: "/images/kitchen.jpg", icon: <Utensils strokeWidth={1.5} className="w-5 h-5 text-white transition-transform duration-500 group-hover:rotate-12" />, count: "24 items" },
-              { name: "Laundry Room", desc: "Washing machines, dryers", img: "/images/laundry.jpg", icon: <Shirt strokeWidth={1.5} className="w-5 h-5 text-white transition-transform duration-500 group-hover:rotate-12" />, count: "12 items" },
-              { name: "Living Room", desc: "Sofas, TVs, recliners", img: "/images/living.jpg", icon: <Tv strokeWidth={1.5} className="w-5 h-5 text-white transition-transform duration-500 group-hover:rotate-12" />, count: "36 items" },
-              { name: "Bedroom", desc: "Beds, wardrobes, ACs", img: "/images/bed.jpg", icon: <Bed strokeWidth={1.5} className="w-5 h-5 text-white transition-transform duration-500 group-hover:rotate-12" />, count: "18 items" }
+              { name: "Kitchen", desc: "Fridges, cooktops, mixers", img: "/images/kitchen.jpg", icon: <Utensils strokeWidth={1.5} className="w-4 h-4 sm:w-5 sm:h-5 text-white transition-transform duration-500 group-hover:rotate-12" />, count: "24 items" },
+              { name: "Laundry Room", desc: "Washing machines, dryers", img: "/images/laundry.jpg", icon: <Shirt strokeWidth={1.5} className="w-4 h-4 sm:w-5 sm:h-5 text-white transition-transform duration-500 group-hover:rotate-12" />, count: "12 items" },
+              { name: "Living Room", desc: "Sofas, TVs, recliners", img: "/images/living.jpg", icon: <Tv strokeWidth={1.5} className="w-4 h-4 sm:w-5 sm:h-5 text-white transition-transform duration-500 group-hover:rotate-12" />, count: "36 items" },
+              { name: "Bedroom", desc: "Beds, wardrobes, ACs", img: "/images/bed.jpg", icon: <Bed strokeWidth={1.5} className="w-4 h-4 sm:w-5 sm:h-5 text-white transition-transform duration-500 group-hover:rotate-12" />, count: "18 items" }
             ] : [
-              { name: "Living Room", desc: "Sofas, TV units, coffee tables", img: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=800&auto=format&fit=crop", icon: <Sofa strokeWidth={1.5} className="w-5 h-5 text-white transition-transform duration-500 group-hover:rotate-12" />, count: "42 items" },
-              { name: "Bedroom", desc: "Beds, wardrobes, dressers", img: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=800&auto=format&fit=crop", icon: <Bed strokeWidth={1.5} className="w-5 h-5 text-white transition-transform duration-500 group-hover:rotate-12" />, count: "28 items" },
-              { name: "Dining Room", desc: "Dining tables, chairs, sideboards", img: "https://images.unsplash.com/photo-1617806118233-18e1c0945594?q=80&w=800&auto=format&fit=crop", icon: <Utensils strokeWidth={1.5} className="w-5 h-5 text-white transition-transform duration-500 group-hover:rotate-12" />, count: "15 items" },
-              { name: "Study/Office", desc: "Study tables, chairs, bookshelves", img: "https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=800&auto=format&fit=crop", icon: <Ruler strokeWidth={1.5} className="w-5 h-5 text-white transition-transform duration-500 group-hover:rotate-12" />, count: "10 items" }
+              { name: "Living Room", desc: "Sofas, TV units, coffee tables", img: "https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=800&auto=format&fit=crop", icon: <Sofa strokeWidth={1.5} className="w-4 h-4 sm:w-5 sm:h-5 text-white transition-transform duration-500 group-hover:rotate-12" />, count: "42 items" },
+              { name: "Bedroom", desc: "Beds, wardrobes, dressers", img: "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?q=80&w=800&auto=format&fit=crop", icon: <Bed strokeWidth={1.5} className="w-4 h-4 sm:w-5 sm:h-5 text-white transition-transform duration-500 group-hover:rotate-12" />, count: "28 items" },
+              { name: "Dining Room", desc: "Dining tables, chairs, sideboards", img: "https://images.unsplash.com/photo-1617806118233-18e1c0945594?q=80&w=800&auto=format&fit=crop", icon: <Utensils strokeWidth={1.5} className="w-4 h-4 sm:w-5 sm:h-5 text-white transition-transform duration-500 group-hover:rotate-12" />, count: "15 items" },
+              { name: "Study/Office", desc: "Study tables, chairs, bookshelves", img: "https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=800&auto=format&fit=crop", icon: <Ruler strokeWidth={1.5} className="w-4 h-4 sm:w-5 sm:h-5 text-white transition-transform duration-500 group-hover:rotate-12" />, count: "10 items" }
             ]).map((room, i) => (
-              <Link key={i} href={`/${activeStore}?room=${room.name}`} className="group relative rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 ease-out h-80 hover:scale-[1.02] block">
+              <Link key={i} href={`/${activeStore}?room=${room.name}`} className="group relative rounded-2xl overflow-hidden cursor-pointer shadow-sm hover:shadow-xl transition-all duration-300 ease-out h-48 sm:h-80 hover:scale-[1.02] block">
                 <div className="absolute inset-0 bg-slate-900">
                   <img src={room.img} alt={room.name} className="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-transform duration-700 group-hover:scale-110" />
                 </div>
@@ -219,19 +219,19 @@ export default function HomeClient({
                 <div className="absolute inset-0 opacity-[0.15] mix-blend-overlay" style={{backgroundImage: "url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22noiseFilter%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.65%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23noiseFilter)%22/%3E%3C/svg%3E')"}}></div>
                 <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300"></div>
                 
-                <div className="relative p-6 flex flex-col justify-between h-full z-10">
+                <div className="relative p-4 sm:p-6 flex flex-col justify-between h-full z-10">
                   <div className="flex justify-between items-start">
-                    <div className="p-2.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-sm flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
+                    <div className="p-2 sm:p-2.5 bg-white/10 backdrop-blur-md rounded-full border border-white/20 shadow-sm flex items-center justify-center transition-transform duration-500 group-hover:scale-105">
                       {room.icon}
                     </div>
-                    <span className="text-[10px] font-medium uppercase tracking-widest text-white/80 bg-white/10 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20">{room.count}</span>
+                    <span className="text-[9px] sm:text-[10px] font-medium uppercase tracking-widest text-white/80 bg-white/10 backdrop-blur-md px-2 py-1 sm:px-3 sm:py-1.5 rounded-full border border-white/20">{room.count}</span>
                   </div>
                   
-                  <div className="flex flex-col transform translate-y-8 group-hover:translate-y-0 transition-transform duration-300 ease-out">
-                    <h3 className="text-2xl font-medium text-white mb-1">{room.name}</h3>
-                    <p className="text-white/60 text-sm font-light mb-4">{room.desc}</p>
+                  <div className="flex flex-col sm:transform sm:translate-y-8 group-hover:translate-y-0 transition-transform duration-300 ease-out">
+                    <h3 className="text-lg sm:text-2xl font-medium text-white mb-0.5 sm:mb-1">{room.name}</h3>
+                    <p className="text-white/60 text-xs sm:text-sm font-light mb-2 sm:mb-4 line-clamp-1 sm:line-clamp-none">{room.desc}</p>
                     
-                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 flex items-center text-sm font-medium text-white/90">
+                    <div className="opacity-0 group-hover:opacity-100 transition-opacity duration-300 delay-75 hidden sm:flex items-center text-sm font-medium text-white/90">
                       Shop Collection <ArrowRight className="ml-2 w-4 h-4" />
                     </div>
                   </div>
@@ -300,12 +300,12 @@ export default function HomeClient({
       )}
 
       {/* Featured Arrivals */}
-      <section className="py-20 bg-[#FAFAF8] dark:bg-slate-950 border-t dark:border-slate-800">
+      <section className="py-12 sm:py-20 bg-[#FAFAF8] dark:bg-slate-950 border-t dark:border-slate-800">
         <div className="container mx-auto px-4">
-          <div className="flex justify-between items-end mb-12">
+          <div className="flex justify-between items-end mb-8 sm:mb-12">
             <div>
-              <h2 className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-white mb-3 font-normal">Featured {isAppliance ? "Arrivals" : "Pieces"}</h2>
-              <p className="text-slate-500 dark:text-slate-400 text-lg font-light tracking-wide">
+              <h2 className="text-2xl sm:text-4xl md:text-5xl font-serif text-slate-900 dark:text-white mb-2 sm:mb-3 font-normal">Featured {isAppliance ? "Arrivals" : "Pieces"}</h2>
+              <p className="text-slate-500 dark:text-slate-400 text-sm sm:text-lg font-light tracking-wide">
                 Newly added to our catalog this week
               </p>
             </div>
@@ -314,36 +314,36 @@ export default function HomeClient({
             </Link>
           </div>
           
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 items-stretch">
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-8 items-stretch">
             {featuredProducts.slice(0, 7).map((product, index) => (
-              <Link key={product.id} href={`/product/${product.id}`} className={`group block ${index === 0 ? "sm:col-span-2 lg:col-span-2" : ""}`}>
+              <Link key={product.id} href={`/product/${product.id}`} className={`group block ${index === 0 ? "col-span-2 sm:col-span-2 lg:col-span-2" : ""}`}>
                 <div className="bg-white dark:bg-slate-900 rounded-[20px] overflow-hidden shadow-[0_1px_3px_rgba(0,0,0,0.04),0_8px_24px_rgba(0,0,0,0.04)] hover:shadow-[0_4px_12px_rgba(0,0,0,0.05),0_12px_32px_rgba(0,0,0,0.06)] transition-all duration-300 flex flex-col h-full border border-black/[0.03] dark:border-white/10">
-                  <div className={`w-full ${index === 0 ? "aspect-square sm:aspect-[2/1]" : "aspect-square"} bg-white relative overflow-hidden flex items-center justify-center p-8`}>
+                  <div className={`w-full ${index === 0 ? "aspect-square sm:aspect-[2/1]" : "aspect-square"} bg-white relative overflow-hidden flex items-center justify-center p-4 sm:p-8`}>
                     {product.imageUrls && product.imageUrls.length > 0 ? (
                       <img src={product.imageUrls[0]} alt={product.name} className="object-contain w-full h-full mix-blend-multiply group-hover:scale-[1.03] transition-transform duration-700 ease-out" />
                     ) : (
                       <img src={isAppliance ? placeholderImages[index % placeholderImages.length] : furnitureImages[index % furnitureImages.length]} alt={product.name} className="object-cover w-full h-full group-hover:scale-[1.03] transition-transform duration-700 ease-out" />
                     )}
                   </div>
-                  <div className="p-5 flex flex-col flex-grow">
+                  <div className="p-3.5 sm:p-5 flex flex-col flex-grow">
                     {product.brand && (
                       <span className="text-[10px] font-medium tracking-widest text-slate-400 uppercase mb-1 block">
                         {product.brand}
                       </span>
                     )}
-                    <h3 className="font-medium text-slate-900 dark:text-white mb-4 line-clamp-2 capitalize text-base flex-grow">
+                    <h3 className="font-medium text-slate-900 dark:text-white mb-3 sm:mb-4 line-clamp-2 capitalize text-xs sm:text-base flex-grow">
                       {product.name.toLowerCase()}
                     </h3>
-                    <div className="flex items-center justify-between mt-auto pt-4 border-t border-slate-100 dark:border-slate-800">
-                      <span className="text-xs font-medium flex items-center text-slate-500 dark:text-slate-400">
-                        <span className={`w-1.5 h-1.5 rounded-full mr-2 ${product.inStock ? "bg-emerald-400" : "bg-rose-400"}`}></span>
+                    <div className="flex items-center justify-between mt-auto pt-3 sm:pt-4 border-t border-slate-100 dark:border-slate-800">
+                      <span className="text-[10px] sm:text-xs font-medium flex items-center text-slate-500 dark:text-slate-400">
+                        <span className={`w-1.5 h-1.5 rounded-full mr-1.5 sm:mr-2 ${product.inStock ? "bg-emerald-400" : "bg-rose-400"}`}></span>
                         {product.inStock ? "In stock" : "Out of stock"}
                       </span>
                       
                       <div className="flex items-center text-slate-400 group-hover:text-slate-900 dark:group-hover:text-white transition-colors">
-                        <span className="text-xs font-medium mr-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300">View</span>
-                        <div className="w-8 h-8 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center group-hover:border-slate-900 dark:group-hover:border-white transition-colors">
-                          <ArrowRight strokeWidth={1.5} className="w-4 h-4" />
+                        <span className="text-xs font-medium mr-2 opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300 hidden sm:inline">View</span>
+                        <div className="w-7 h-7 sm:w-8 sm:h-8 rounded-full border border-slate-200 dark:border-slate-700 flex items-center justify-center group-hover:border-slate-900 dark:group-hover:border-white transition-colors">
+                          <ArrowRight strokeWidth={1.5} className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
                         </div>
                       </div>
                     </div>
@@ -360,54 +360,52 @@ export default function HomeClient({
         </div>
       </section>
 
-      {/* 4. Best Sellers (Appliances Only) */}
-      {isAppliance && (
-        <section className="py-20 bg-[#FAFAF9] dark:bg-slate-950 border-t border-stone-200 dark:border-slate-800">
-          <div className="container mx-auto px-4">
-            <div className="flex justify-between items-end mb-12">
-              <div>
-                <h2 className="text-4xl md:text-5xl font-serif text-slate-900 dark:text-white mb-3 font-normal flex items-center gap-3">
-                  <Flame strokeWidth={1.5} className="w-10 h-10 text-amber-600" /> Best Sellers
-                </h2>
-                <p className="text-slate-500 dark:text-slate-400 text-lg font-light tracking-wide">Our most popular choices this month</p>
-              </div>
-              <Link href={`/${activeStore}`} className="text-slate-500 dark:text-slate-400 font-medium hover:text-slate-900 dark:hover:text-white transition-colors hidden sm:flex items-center">
-                View all <ArrowRight className="ml-2 w-4 h-4" />
-              </Link>
+      {/* 4. Best Sellers (Both Stores) */}
+      <section className="py-12 sm:py-20 bg-[#FAFAF9] dark:bg-slate-950 border-t border-stone-200 dark:border-slate-800">
+        <div className="container mx-auto px-4">
+          <div className="flex justify-between items-end mb-8 sm:mb-12">
+            <div>
+              <h2 className="text-2xl sm:text-4xl md:text-5xl font-serif text-slate-900 dark:text-white mb-2 sm:mb-3 font-normal flex items-center gap-2 sm:gap-3">
+                <Flame strokeWidth={1.5} className="w-7 h-7 sm:w-10 sm:h-10 text-amber-600" /> Best Sellers
+              </h2>
+              <p className="text-slate-500 dark:text-slate-400 text-sm sm:text-lg font-light tracking-wide">Our most popular choices this month</p>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-              {bestSellerProducts.slice(0, 4).map((product, i) => (
-                <Link key={product.id + '-bs'} href={`/product/${product.id}`} className="group block relative">
-                  <div className="bg-white dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-3xl overflow-hidden shadow-sm hover:shadow-lg transition flex flex-col h-full">
-                    <div className="w-full aspect-square bg-white relative overflow-hidden flex items-center justify-center p-8 border-b border-gray-100 dark:border-slate-800">
-                      {product.imageUrls && product.imageUrls.length > 0 ? (
-                         <img src={product.imageUrls[0]} alt={product.name} className="object-contain w-full h-full mix-blend-multiply group-hover:scale-105 transition duration-300" />
-                      ) : (
-                         <span className="text-gray-400 font-medium text-sm">No Image</span>
-                      )}
-                    </div>
-                    <div className="p-5 sm:p-6 flex flex-col flex-grow bg-white dark:bg-slate-950">
-                      {product.brand && (
-                        <span className="text-[11px] font-semibold tracking-wider text-gray-400 dark:text-gray-500 uppercase mb-1">{product.brand}</span>
-                      )}
-                      <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-6 line-clamp-2 uppercase text-base sm:text-lg flex-grow">{product.name}</h3>
+            <Link href={`/${activeStore}`} className="text-slate-500 dark:text-slate-400 font-medium hover:text-slate-900 dark:hover:text-white transition-colors hidden sm:flex items-center">
+              View all <ArrowRight className="ml-2 w-4 h-4" />
+            </Link>
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-3.5 sm:gap-6 items-stretch">
+            {bestSellerProducts.slice(0, 4).map((product, i) => (
+              <Link key={product.id + '-bs'} href={`/product/${product.id}`} className="group block relative">
+                <div className="bg-white dark:bg-slate-950 border border-gray-200 dark:border-slate-800 rounded-2xl sm:rounded-3xl overflow-hidden shadow-sm hover:shadow-lg transition flex flex-col h-full">
+                  <div className="w-full aspect-square bg-white relative overflow-hidden flex items-center justify-center p-4 sm:p-8 border-b border-gray-100 dark:border-slate-800">
+                    {product.imageUrls && product.imageUrls.length > 0 ? (
+                       <img src={product.imageUrls[0]} alt={product.name} className="object-contain w-full h-full mix-blend-multiply group-hover:scale-105 transition duration-300" />
+                    ) : (
+                       <span className="text-gray-400 font-medium text-xs sm:text-sm">No Image</span>
+                    )}
+                  </div>
+                  <div className="p-3.5 sm:p-6 flex flex-col flex-grow bg-white dark:bg-slate-950">
+                    {product.brand && (
+                      <span className="text-[10px] sm:text-[11px] font-semibold tracking-wider text-gray-400 dark:text-gray-500 uppercase mb-1">{product.brand}</span>
+                    )}
+                    <h3 className="font-bold text-gray-900 dark:text-gray-100 mb-3 sm:mb-6 line-clamp-2 uppercase text-xs sm:text-lg flex-grow">{product.name}</h3>
 
-                      <div className="flex items-center justify-between mt-auto pt-4 border-t border-gray-100 dark:border-slate-800">
-                        <span className={`px-3 py-1.5 rounded-lg text-xs font-bold ${product.inStock ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"}`}>
-                          {product.inStock ? "In Stock" : "Out of Stock"}
-                        </span>
-                        <span className="bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-4 py-1.5 rounded-full text-xs font-semibold">
-                          View
-                        </span>
-                      </div>
+                    <div className="flex items-center justify-between mt-auto pt-3 sm:pt-4 border-t border-gray-100 dark:border-slate-800">
+                      <span className={`px-2 py-1 sm:px-3 sm:py-1.5 rounded-lg text-[10px] sm:text-xs font-bold ${product.inStock ? "bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400" : "bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400"}`}>
+                        {product.inStock ? "In Stock" : "Out of Stock"}
+                      </span>
+                      <span className="bg-blue-50 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300 px-2.5 py-1 sm:px-4 sm:py-1.5 rounded-full text-[10px] sm:text-xs font-semibold">
+                        View
+                      </span>
                     </div>
                   </div>
-                </Link>
-              ))}
-            </div>
+                </div>
+              </Link>
+            ))}
           </div>
-        </section>
-      )}
+        </div>
+      </section>
 
       {/* 5. New Launches (Both Stores) */}
       <section className="py-16 bg-white dark:bg-slate-950 border-t dark:border-slate-800">
