@@ -3,16 +3,26 @@
 import { useEffect, useState, useCallback } from "react"
 
 const SPLASH_KEY = "srisai_splash_shown"
-// Total animation duration before auto-exit (ms)
-// logo(0.8s) + title(1.25s) + subtitle(1.65s) + hold(0.9s) = 2.55s -> round to 2600
-const SPLASH_DURATION = 2600
-// Exit animation duration (matches .splash-exit CSS: 0.55s)
+
+// Total time before auto-exit begins (ms)
+// logo 0.7s + title 0.55s delay 0.7s + line delay 1.0s + subtitle delay 1.15s + hold = 2800
+const SPLASH_DURATION = 2800
+// Must match .splash-exit CSS duration (0.55s)
 const EXIT_DURATION = 550
 
 export default function SplashScreen() {
-  const [show, setShow] = useState(false)
+  /**
+   * CRITICAL FIX for hydration glitch:
+   * show starts TRUE — the white overlay covers the page from the very first SSR/client render.
+   * This prevents the site ever being visible before the splash.
+   * useEffect then decides:
+   *   - already seen session  → setShow(false) immediately (instant dismiss, no flash)
+   *   - reduced-motion pref   → setShow(false) immediately
+   *   - first time this session → setAnimating(true) to kick off CSS animations
+   */
+  const [show, setShow] = useState(true)
+  const [animating, setAnimating] = useState(false)
   const [exiting, setExiting] = useState(false)
-  const [mounted, setMounted] = useState(false)
 
   const beginExit = useCallback(() => {
     if (exiting) return
@@ -24,18 +34,26 @@ export default function SplashScreen() {
   }, [exiting])
 
   useEffect(() => {
-    setMounted(true)
-
-    // Respect reduced-motion: skip entirely
+    // Respect prefers-reduced-motion
     const prefersReduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    if (prefersReduced) return
+    if (prefersReduced) {
+      setShow(false)
+      return
+    }
 
-    // Already shown this session?
+    // Skip if already shown this session
     let alreadyShown = false
     try { alreadyShown = !!sessionStorage.getItem(SPLASH_KEY) } catch {}
-    if (alreadyShown) return
+    if (alreadyShown) {
+      setShow(false)
+      return
+    }
 
-    setShow(true)
+    // Fresh session — start the sequential animation
+    // Tiny rAF delay to ensure the white overlay paint has flushed before CSS anims begin
+    requestAnimationFrame(() => {
+      setAnimating(true)
+    })
 
     const timer = setTimeout(() => {
       beginExit()
@@ -45,58 +63,58 @@ export default function SplashScreen() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  // Skip on tap/click
-  const handleSkip = useCallback(() => {
-    beginExit()
-  }, [beginExit])
-
-  if (!mounted || !show) return null
+  if (!show) return null
 
   return (
     <div
       role="status"
-      aria-label="Loading Sri Sai Home Appliances"
-      aria-live="polite"
-      onClick={handleSkip}
-      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white cursor-pointer select-none ${exiting ? "splash-exit" : ""}`}
+      aria-label="Loading Sri Sai"
+      onClick={() => animating && beginExit()}
+      className={`fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-white select-none ${animating ? "cursor-pointer" : ""} ${exiting ? "splash-exit" : ""}`}
     >
-      {/* Centered brand block */}
-      <div className="flex flex-col items-center gap-4 px-6 text-center">
+      <div className="flex flex-col items-center gap-5 px-6 text-center">
 
-        {/* Logo */}
-        <div className="splash-logo-animate">
+        {/* Step 1 — Logo scales in with spring bounce */}
+        <div className={animating ? "splash-logo-animate" : "opacity-0"}>
           <img
             src="/logo.png"
             alt="Sri Sai Logo"
             draggable={false}
-            className="w-20 h-20 sm:w-24 sm:h-24 object-contain drop-shadow-lg"
+            className="w-20 h-20 sm:w-28 sm:h-28 object-contain"
+            style={{ filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.12))" }}
           />
         </div>
 
-        {/* Brand Name */}
-        <h1 className="splash-title-animate font-bold tracking-tight text-gray-900 text-3xl sm:text-4xl leading-tight">
+        {/* Step 2 — Brand name slides up */}
+        <h1
+          className={`font-bold tracking-tight text-gray-900 text-3xl sm:text-4xl leading-none ${animating ? "splash-title-animate" : "opacity-0"}`}
+        >
           Sri Sai
         </h1>
 
-        {/* Gold accent divider */}
+        {/* Step 3 — Gold accent line expands */}
         <div
-          className="splash-line-animate h-[2px] bg-amber-500 rounded-full mx-auto"
+          className={`h-[2px] bg-gradient-to-r from-amber-400 via-amber-500 to-amber-400 rounded-full ${animating ? "splash-line-animate" : "opacity-0"}`}
           style={{ width: "4rem" }}
         />
 
-        {/* Subtitle */}
-        <p className="splash-subtitle-animate text-sm sm:text-base text-gray-500 font-medium tracking-wide uppercase">
+        {/* Step 4 — Subtitle slides up */}
+        <p
+          className={`text-xs sm:text-sm text-gray-400 font-semibold tracking-[0.2em] uppercase ${animating ? "splash-subtitle-animate" : "opacity-0"}`}
+        >
           Home Appliances and Furnitures
         </p>
       </div>
 
-      {/* Skip hint */}
-      <p
-        className="absolute bottom-8 text-xs text-gray-300 tracking-widest uppercase"
-        style={{ animation: "splash-text-in 0.4s ease-out 1.8s both" }}
-      >
-        Tap to skip
-      </p>
+      {/* Tap-to-skip hint — appears late so it does not clutter the reveal */}
+      {animating && (
+        <p
+          className="absolute bottom-8 text-[10px] text-gray-300 tracking-[0.25em] uppercase"
+          style={{ animation: "splash-text-in 0.5s ease-out 2.2s both" }}
+        >
+          tap anywhere to skip
+        </p>
+      )}
     </div>
   )
 }

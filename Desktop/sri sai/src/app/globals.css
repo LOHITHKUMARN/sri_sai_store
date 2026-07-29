@@ -153,45 +153,55 @@ html, body {
    SPLASH SCREEN ANIMATIONS
    ============================================================ */
 
+/* Logo: spring scale-up from below, slight overshoot bounce */
 @keyframes splash-logo-in {
-  0%   { opacity: 0; transform: scale(0.72) translateY(8px); }
-  60%  { opacity: 1; transform: scale(1.04) translateY(0); }
+  0%   { opacity: 0; transform: scale(0.6) translateY(20px); }
+  55%  { opacity: 1; transform: scale(1.08) translateY(-4px); }
+  75%  { transform: scale(0.97) translateY(0); }
   100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
+/* Text / subtitle: slides up from below with fade */
 @keyframes splash-text-in {
-  0%   { opacity: 0; transform: translateY(14px); }
+  0%   { opacity: 0; transform: translateY(20px); }
   100% { opacity: 1; transform: translateY(0); }
 }
 
+/* Gold line: expands from center outward */
 @keyframes splash-line-in {
-  0%   { width: 0; opacity: 0; }
-  100% { width: 4rem; opacity: 1; }
+  0%   { transform: scaleX(0); opacity: 0; }
+  100% { transform: scaleX(1); opacity: 1; }
 }
 
+/* Overlay fade-out on exit */
 @keyframes splash-overlay-out {
-  0%   { opacity: 1; }
-  100% { opacity: 0; pointer-events: none; }
+  0%   { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.03); pointer-events: none; }
 }
 
+/* Sequential timing — each element appears AFTER the previous finishes */
 .splash-logo-animate {
-  animation: splash-logo-in 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+  animation: splash-logo-in 0.75s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s both;
 }
 
 .splash-title-animate {
-  animation: splash-text-in 0.55s ease-out 0.7s both;
+  /* starts after logo animation finishes (0.05 + 0.75 = 0.8s) */
+  animation: splash-text-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) 0.85s both;
 }
 
 .splash-line-animate {
-  animation: splash-line-in 0.45s ease-out 1.0s both;
+  /* starts after title (0.85 + 0.5 = 1.35s) */
+  transform-origin: center;
+  animation: splash-line-in 0.4s ease-out 1.35s both;
 }
 
 .splash-subtitle-animate {
-  animation: splash-text-in 0.5s ease-out 1.15s both;
+  /* starts after line (1.35 + 0.4 = 1.75s) */
+  animation: splash-text-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) 1.75s both;
 }
 
 .splash-exit {
-  animation: splash-overlay-out 0.55s ease-in-out forwards;
+  animation: splash-overlay-out 0.55s cubic-bezier(0.4, 0, 1, 1) forwards;
 }
 
 @media (prefers-reduced-motion: reduce) {
